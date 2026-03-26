@@ -1,0 +1,159 @@
+import { useState } from "react";
+import "./RequestCard.css";
+
+const RequestCard = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    phone1: "",
+    phone2: "",
+    email: "",
+    serviceType: "",
+    depth: "",
+    address: "",
+    area: "",
+    pincode: "",
+    description: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleServiceSelect = (value) => {
+    setFormData((prev) => ({
+      ...prev,
+      serviceType: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!formData.name || !formData.phone1 || !formData.serviceType || !formData.address || !formData.area || !formData.pincode) {
+      alert("Please fill all mandatory fields");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const res = await fetch("http://127.0.0.1:8000/request", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      alert("Request Submitted Successfully!");
+
+      console.log(data);
+    } catch (err) {
+      alert("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="request-wrapper">
+      <div className="request-card">
+
+        <h2 className="card-title">🚰 Borewell Services</h2>
+        <p className="subtitle">Fast • Trusted • Doorstep Service</p>
+
+        <form onSubmit={handleSubmit} className="form">
+
+          <div className="form-group">
+            <label>👤 Name *</label>
+            <input type="text" name="name" onChange={handleChange} placeholder="Enter your name" />
+          </div>
+
+          <div className="form-group">
+            <label>📞 Primary Phone *</label>
+            <input type="tel" name="phone1" onChange={handleChange} placeholder="10-digit number" />
+          </div>
+
+          <div className="form-group">
+            <label>📞 Secondary Phone</label>
+            <input type="tel" name="phone2" onChange={handleChange} />
+          </div>
+
+          <div className="form-group">
+            <label>📧 Email</label>
+            <input type="email" name="email" onChange={handleChange} />
+          </div>
+
+          {/* ✅ SERVICE BUTTONS INSTEAD OF DROPDOWN */}
+          <div className="form-group">
+            <label>⚙️ Service Type *</label>
+
+            <div className="service-options">
+              {[
+                { label: "Drilling", value: "drilling" },
+                { label: "Motor Install", value: "motor_install" },
+                { label: "Repair", value: "repair" },
+                { label: "Motor Removal", value: "motor_remove" },
+                { label: "Camera", value: "camera" },
+                { label: "Other", value: "other" },
+              ].map((item) => (
+                <button
+                  type="button"
+                  key={item.value}
+                  className={formData.serviceType === item.value ? "active" : ""}
+                  onClick={() => handleServiceSelect(item.value)}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {(formData.serviceType === "motor_install" ||
+            formData.serviceType === "repair" ||
+            formData.serviceType === "motor_remove" ||
+            formData.serviceType === "camera") && (
+            <div className="form-group">
+              <label>📏 Borewell Depth</label>
+              <input type="number" name="depth" onChange={handleChange} placeholder="in feet" />
+            </div>
+          )}
+
+          <div className="form-group">
+            <label>📍 Address *</label>
+            <input type="text" name="address" onChange={handleChange} />
+          </div>
+
+          <div className="form-group">
+            <label>🏙️ Area *</label>
+            <input type="text" name="area" onChange={handleChange} />
+          </div>
+
+          <div className="form-group">
+            <label>📮 Pincode *</label>
+            <input type="number" name="pincode" onChange={handleChange} />
+          </div>
+
+          <div className="form-group">
+            <label>📝 Description</label>
+            <textarea name="description" onChange={handleChange}></textarea>
+          </div>
+
+          <button type="submit" className="submit-btn">
+            {loading ? "Submitting..." : "🚀 Submit Request"}
+          </button>
+
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default RequestCard;

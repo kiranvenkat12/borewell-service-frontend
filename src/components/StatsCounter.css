@@ -1,0 +1,84 @@
+/* 🌊 Background with subtle gradient */
+.stats-container {
+  padding: 60px 15px;
+  background: linear-gradient(135deg, #e9f2ff, #f7fbff);
+  text-align: center;
+}
+
+/* Title */
+.stats-title {
+  font-size: 26px;
+  margin-bottom: 40px;
+  color: #0d6efd;
+  font-weight: 700;
+}
+
+/* Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 20px;
+}
+
+/* 🔥 Card Design */
+.stat-card {
+  position: relative;
+  background: white;
+  padding: 25px 20px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+/* ✨ Glow border effect */
+.stat-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 1px;
+  background: linear-gradient(135deg, #0d6efd, #00c6ff);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* Hover effect */
+.stat-card:hover {
+  transform: translateY(-6px) scale(1.02);
+}
+
+/* 💧 Big number */
+.stat-card h3 {
+  font-size: 34px;
+  color: #0d6efd;
+  margin-bottom: 8px;
+}
+
+/* Label */
+.stat-card p {
+  color: #555;
+  font-size: 14px;
+}
+
+/* 🔥 Icon style */
+.stat-icon {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+/* 📱 Mobile */
+@media (max-width: 480px) {
+  .stats-title {
+    font-size: 22px;
+  }
+
+  .stat-card {
+    padding: 20px;
+  }
+
+  .stat-card h3 {
+    font-size: 28px;
+  }
+}

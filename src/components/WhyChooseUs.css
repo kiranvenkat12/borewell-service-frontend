@@ -1,0 +1,49 @@
+.why-container {
+  padding: 50px 20px;
+  background: #ffffff;
+  text-align: center;
+}
+
+.why-title {
+  font-size: 24px;
+  margin-bottom: 30px;
+  color: #222;
+}
+
+.why-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.why-card {
+  width: 280px;
+  padding: 20px;
+  border-radius: 10px;
+  background: #f9fafc;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease;
+}
+
+.why-card:hover {
+  transform: translateY(-5px);
+}
+
+.why-card h3 {
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+.why-card p {
+  color: #555;
+  font-size: 14px;
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+  .why-card {
+    width: 90%;
+  }
+}
