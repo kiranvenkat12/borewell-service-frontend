@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { getAllRequests, deleteCompleted } from "../services/adminDashboardService";
-import "./AdminDashboard.css";
+import { getAllRequests, deleteCompleted } from "../services/adminDashboardService.js";
+import "./CompletedRequests.css";
+
 const CompletedRequests = () => {
   const [completed, setCompleted] = useState([]);
 

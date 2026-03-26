@@ -1,173 +1,107 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-}
 
-.admin-layout {
-  display: flex;
-  min-height: 100vh;
-  background: #f4f6f9;
-}
-
-/* ---------------- Sidebar ---------------- */
+/* SIDEBAR */
 .sidebar {
-  width: 220px;
-  background: #1e293b;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 140px;
+  height: 100vh;
+  background: linear-gradient(180deg, #0f766e, #115e59); /* deep water tones */
   color: white;
-  padding: 20px;
-  transition: width 0.3s;
-  position: relative;
+  padding: 25px 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 3px 0 10px rgba(0,0,0,0.1);
 }
 
-.sidebar.closed {
-  width: 60px;
+/* PROFILE */
+.sidebar .profile-pic {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 3px solid #e0f2f1;
+  object-fit: cover;
+  margin-bottom: 12px;
 }
 
-.sidebar .toggle-btn {
-  background: #007bff;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  cursor: pointer;
-  margin-bottom: 20px;
-  border-radius: 5px;
+.sidebar .user-name {
+  font-weight: 600;
+  font-size: 16px;
+  text-align: center;
 }
 
+.sidebar .designation {
+  font-size: 13px;
+  margin-bottom: 25px;
+  opacity: 0.85;
+  text-align: center;
+}
+
+/* MENU */
 .sidebar ul {
   list-style: none;
+  width: 100%;
   padding: 0;
 }
 
 .sidebar li {
-  margin: 15px 0;
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 5px;
-  transition: background 0.2s;
-}
-
-.sidebar li:hover {
-  background: #007bff;
-}
-
-/* ---------------- Header ---------------- */
-.header {
-  background: white;
-  padding: 15px 20px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-
-/* ---------------- Content ---------------- */
-.content {
-  flex: 1;
-  padding: 20px;
-}
-
-/* ---------------- Cards ---------------- */
-.cards {
   display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-}
-
-.card {
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  width: 250px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-}
-
-.card p {
-  margin-bottom: 8px;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  cursor: pointer;
   font-size: 14px;
-}
-
-.card button {
-  margin-top: 10px;
-  padding: 8px 10px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.card button:hover {
-  background: #0056b3;
-}
-
-/* ---------------- Assign Box ---------------- */
-.assign-box {
-  background: white;
-  padding: 20px;
+  padding: 10px;
   border-radius: 10px;
-  width: 300px;
-  margin-bottom: 20px;
+  transition: all 0.3s ease;
 }
 
-.assign-box input {
+/* Hover Effect */
+.sidebar li:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(3px);
+}
+
+/* Active Menu */
+.sidebar li.active {
+  background: white;
+  color: #0f766e;
+  font-weight: 600;
+}
+
+/* ICON */
+.sidebar li svg,
+.sidebar li .icon {
+  font-size: 18px;
+}
+
+/* FOOTER */
+.sidebar .footer-text {
+  font-size: 12px;
+  margin-top: auto;
+  opacity: 0.7;
+  text-align: center;
+  line-height: 1.5;
+}
+/* Admin layout wrapper */
+.admin-layout {
+display: flex;
+
+}
+
+/* Sidebar stays fixed */
+.sidebar {
+  width: 140px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+}
+
+/* Content shifts only inside admin */
+.content {
+  margin-left: 140px;  /* 👈 moved here */
   width: 100%;
-  margin-bottom: 10px;
-  padding: 8px;
-}
-
-.assign-box button {
-  width: 100%;
-  padding: 10px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.assign-box button:hover {
-  background: #0056b3;
-}
-
-/* ---------------- Delete Button ---------------- */
-.delete-btn {
-  padding: 10px;
-  background: red;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.delete-btn:hover {
-  background: darkred;
-}
-
-/* ---------------- Responsive ---------------- */
-@media (max-width: 768px) {
-  .admin-layout {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    position: relative;
-  }
-
-  .sidebar.closed {
-    width: 100%;
-  }
-
-  .cards {
-    justify-content: center;
-  }
-
-  .card {
-    width: 90%;
-  }
-
-  .assign-box {
-    width: 100%;
-  }
+  padding: 20px;
 }

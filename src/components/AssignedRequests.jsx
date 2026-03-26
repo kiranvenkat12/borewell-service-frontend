@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { getAssignedRequests } from "../services/adminDashboardService";
+import { getAssignedRequests } from "../services/adminDashboardService.js"; // fixed path
 import "./AssignedRequests.css";
+
 const AssignedRequests = () => {
   const [assigned, setAssigned] = useState([]);
 
@@ -19,7 +20,6 @@ const AssignedRequests = () => {
         <div className="card" key={req.id}>
           <p><b>ID:</b> {req.id}</p>
           <p><b>Name:</b> {req.name}</p>
-          <p><b>Assigned Worker ID:</b> {req.workerId}</p>
           <p><b>Status:</b> {req.status}</p>
         </div>
       ))}

@@ -1,11 +1,11 @@
 import { useState } from "react";
-import Sidebar from "../components/adminComponents/Sidebar.jsx";
-import Header from "../components/Header";
-import ServiceRequests from "../components/ServiceRequests";
-import Workers from "../components/Workers";
-import AssignedRequests from "../components/AssignedRequests";
-import CompletedRequests from "../components/CompletedRequests";
-
+import Sidebar from "../../components/Sidebar";
+import Header from "../../components/Header";
+import ServiceRequests from "../../components/ServiceRequests";
+import Workers from "../../components/Worker";
+import AssignedRequests from "../../components/AssignedRequests";
+import CompletedRequests from "../../components/CompletedRequests";
+import "./AdminDashboard.css";
 const AdminDashboard = () => {
   const [selectedPage, setSelectedPage] = useState("dashboard");
   const [selectedReq, setSelectedReq] = useState(null);
