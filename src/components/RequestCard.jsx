@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./RequestCard.css";
+import { createRequest } from "../services/requestService";
 
 const RequestCard = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: "",
-    phone1: "",
-    phone2: "",
-    serviceType: "",
-    depth: "",
+    phone_primary: "",
+    phone_secondary: "",
+    service_type: "",
+    borewell_depth: "",
     address: "",
     pincode: "",
     description: "",
@@ -29,7 +30,7 @@ const RequestCard = () => {
   const handleServiceSelect = (value) => {
     setFormData((prev) => ({
       ...prev,
-      serviceType: value,
+      service_type: value, // ✅ FIXED
     }));
   };
 
@@ -38,8 +39,8 @@ const RequestCard = () => {
 
     if (
       !formData.name ||
-      !formData.phone1 ||
-      !formData.serviceType ||
+      !formData.phone_primary ||   // ✅ FIXED
+      !formData.service_type ||    // ✅ FIXED
       !formData.address ||
       !formData.pincode
     ) {
@@ -50,18 +51,24 @@ const RequestCard = () => {
     try {
       setLoading(true);
 
-      const res = await fetch("http://127.0.0.1:8000/request", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const data = await createRequest(formData);
 
-      const data = await res.json();
       alert("Request Submitted Successfully!");
       console.log(data);
+
+      setFormData({
+        name: "",
+        phone_primary: "",
+        phone_secondary: "",
+        service_type: "",
+        borewell_depth: "",
+        address: "",
+        pincode: "",
+        description: "",
+      });
+
     } catch (err) {
+      console.error(err);
       alert("Something went wrong");
     } finally {
       setLoading(false);
@@ -72,7 +79,6 @@ const RequestCard = () => {
     <div className="request-wrapper">
       <div className="request-card">
 
-        {/* 🔙 BACK BUTTON */}
         <div className="back-btn" onClick={() => navigate("/")}>
           Back
         </div>
@@ -84,17 +90,32 @@ const RequestCard = () => {
 
           <div className="form-group">
             <label>👤 Name *</label>
-            <input type="text" name="name" onChange={handleChange} placeholder="Enter your name" />
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+            />
           </div>
 
           <div className="form-group">
             <label>📞 Mobile Phone *</label>
-            <input type="tel" name="phone1" onChange={handleChange} placeholder="10-digit number" />
+            <input
+              type="tel"
+              name="phone_primary"
+              value={formData.phone_primary}
+              onChange={handleChange}
+            />
           </div>
 
           <div className="form-group">
             <label>📞 Second Mobile Phone(optional)</label>
-            <input type="tel" name="phone2" onChange={handleChange} />
+            <input
+              type="tel"
+              name="phone_secondary"
+              value={formData.phone_secondary}
+              onChange={handleChange}
+            />
           </div>
 
           <div className="form-group">
@@ -111,7 +132,7 @@ const RequestCard = () => {
                 <button
                   type="button"
                   key={item.value}
-                  className={formData.serviceType === item.value ? "active" : ""}
+                  className={formData.service_type === item.value ? "active" : ""}
                   onClick={() => handleServiceSelect(item.value)}
                 >
                   {item.label}
@@ -120,32 +141,51 @@ const RequestCard = () => {
             </div>
           </div>
 
-          {(formData.serviceType === "motor_install" ||
-            formData.serviceType === "repair" ||
-            formData.serviceType === "motor_remove" ||
-            formData.serviceType === "camera") && (
+          {(formData.service_type === "motor_install" ||
+            formData.service_type === "repair" ||
+            formData.service_type === "motor_remove" ||
+            formData.service_type === "camera") && (
             <div className="form-group">
               <label>📏 Borewell Depth</label>
-              <input type="number" name="depth" onChange={handleChange} placeholder="in feet" />
+              <input
+                type="number"
+                name="borewell_depth"
+                value={formData.borewell_depth} // ✅ fixed spacing typo
+                onChange={handleChange}
+              />
             </div>
           )}
 
           <div className="form-group">
             <label>📍 Address *</label>
-            <input type="text" name="address" onChange={handleChange} />
+            <input
+              type="text"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+            />
           </div>
 
           <div className="form-group">
             <label>📮 Pincode *</label>
-            <input type="number" name="pincode" onChange={handleChange} />
+            <input
+              type="number"
+              name="pincode"
+              value={formData.pincode}
+              onChange={handleChange}
+            />
           </div>
 
           <div className="form-group">
             <label>📝 Description</label>
-            <textarea name="description" onChange={handleChange}></textarea>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+            ></textarea>
           </div>
 
-          <button type="submit" className="submit-btn">
+          <button type="submit" className="submit-btn" disabled={loading}>
             {loading ? "Submitting..." : "🚀 Submit Request"}
           </button>
 
