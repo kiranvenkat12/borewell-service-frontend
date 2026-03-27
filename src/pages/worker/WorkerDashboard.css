@@ -1,0 +1,130 @@
+/* Container */
+.worker-container {
+  padding: 0;
+  background: #f4f6f9;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+/* Header */
+.worker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #007bff;
+  color: white;
+  padding: 15px 20px;
+}
+
+.header-left, .header-center, .header-right {
+  flex: 1;
+  text-align: center;
+}
+
+.header-left { text-align: left; font-weight: bold; }
+.header-center { font-size: 18px; }
+.header-right { text-align: right; }
+
+.logout-btn {
+  background: #ff4d4f;
+  border: none;
+  color: white;
+  padding: 4px 10px;      /* smaller vertical padding, slightly wider for comfort */
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;        /* smaller font size */
+  line-height: 1.2;       /* tighter line height */
+}
+
+/* Cards */
+.worker-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+  justify-content: center;
+}
+
+.worker-card {
+  width: 300px;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  text-align: left;
+}
+
+.worker-card p {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.worker-card button {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.complete-btn {
+  background: green;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: white;
+  padding: 20px 30px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.modal h3 {
+  margin-bottom: 20px;
+}
+
+.modal-actions button {
+  margin: 5px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.modal-actions button:first-child {
+  background: #007bff;
+  color: white;
+}
+
+.modal-actions button:last-child {
+  background: #ccc;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .worker-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .worker-card {
+    width: 90%;
+  }
+}

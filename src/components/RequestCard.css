@@ -14,13 +14,42 @@ body {
 }
 
 .request-card {
+ margin-top: 10vh; /* 🔥 10% from top of viewport */
   width: 100%;
   max-width: 480px;
-  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
   padding: 18px;
   border-radius: 14px;
   background: #ffffff;
   box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  position: relative; 
+}
+
+.back-btn {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: linear-gradient(135deg, #0d6efd, #38a1db); /* water-themed gradient */
+  color: white;
+  border-radius: 0%;
+  width: 60px;
+  height: 40px;
+  display: flex;
+  border-radius: 10px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.4); /* subtle glow */
+  transition: all 0.25s ease-in-out;
+}
+
+.back-btn:hover {
+  transform: translateY(-2px) scale(1.1);
+  box-shadow: 0 6px 16px rgba(13, 110, 253, 0.6);
+  background: linear-gradient(135deg, #38a1db, #0d6efd); /* hover gradient swap */
 }
 
 .card-title {
@@ -72,7 +101,7 @@ textarea {
   height: 80px;
 }
 
-/* 🔥 SERVICE BUTTONS */
+/* SERVICE BUTTONS */
 .service-options {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -106,7 +135,8 @@ textarea {
 }
 
 @media (max-width: 480px) {
-  input, textarea {
+  input,
+  textarea {
     font-size: 16px;
   }
 }

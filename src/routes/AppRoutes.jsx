@@ -1,24 +1,25 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "../pages/Home";
-
+import ServicePage from "../pages/ServicePage";
 // Admin
 import AdminLogin from "../pages/admin/AdminLogin";
 import AdminRegister from "../pages/admin/AdminRegister";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import ManageWorkers from "../pages/admin/ManageWorkers";
 import NotFound from "../pages/NotFound";
-
+import RequestPage from "../pages/RequestPage"; 
 // Worker
 import WorkerLogin from "../pages/worker/WorkerLogin";
 import WorkerDashboard from "../pages/worker/WorkerDashboard";
-
 const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/request" element={<RequestPage />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/services" element={<ServicePage />} />
 
         {/* Admin */}
         <Route path="/admin/login" element={<AdminLogin />} />

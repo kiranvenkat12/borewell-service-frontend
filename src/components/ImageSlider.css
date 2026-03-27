@@ -1,72 +1,99 @@
 .slider-container {
   width: 100%;
-  margin: 40px 0;
-  padding: 10px;
-}
-
-.slider-title {
   text-align: center;
-  margin-bottom: 20px;
-  color: #333;
+  padding: 40px 0;
+  background: #f3f4f6;
 }
 
+.slider-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  margin: auto;
+  overflow: hidden;
+}
+
+/* SLIDER TRACK */
 .slider {
   display: flex;
-  overflow-x: auto;
-  scroll-behavior: smooth;
+  align-items: center;
+  transition: transform 0.5s ease;
 }
 
-.slider::-webkit-scrollbar {
-  display: none;
-}
-
+/* SLIDES */
 .slide {
-  min-width: 300px;
-  height: 200px;
-  margin-right: 15px;
+  width: 260px;
+  height: 320px;
+  margin: 0 10px;
+  border-radius: 20px;
+  overflow: hidden;
   flex-shrink: 0;
+  opacity: 0.4;
+  transform: scale(0.8);
+  transition: all 0.5s ease;
 }
 
+/* IMAGE */
 .slide img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* ACTIVE CENTER */
+.slide.active {
+  opacity: 1;
+  transform: scale(1);
+  z-index: 2;
+}
+
+/* SIDE SLIDES */
+.slide.prev,
+.slide.next {
+  opacity: 0.6;
+  transform: scale(0.9);
+}
+
+/* ARROWS */
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: 1px solid #3b82f6;
+  color: #3b82f6;
+  font-size: 18px;
+  padding: 8px 12px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.arrow.left {
+  left: 10px;
+}
+
+.arrow.right {
+  right: 10px;
+}
+
+/* DOTS */
+.dots {
+  margin-top: 20px;
+}
+
+.dot {
+  height: 8px;
+  width: 8px;
+  margin: 0 5px;
+  display: inline-block;
+  background: #cbd5e1;
+  border-radius: 50%;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.dot.active {
+  width: 20px;
   border-radius: 10px;
-}
-
-/* 🔥 Responsive */
-
-@media (max-width: 768px) {
-  .slide {
-    min-width: 250px;
-    height: 180px;
-  }
-}
-
-@media (max-width: 480px) {
-  .slide {
-    min-width: 200px;
-    height: 150px;
-  }
-}
-
-/* Desktop / Tablet */
-.slide {
-  min-width: 300px;
-  height: 200px;
-  margin-right: 15px;
-  flex-shrink: 0;
-}
-
-/* 📱 MOBILE FIX */
-@media (max-width: 480px) {
-  .slider {
-    overflow: hidden; /* hide scroll */
-  }
-
-  .slide {
-    min-width: 100%;  /* FULL WIDTH */
-    height: 180px;
-    margin-right: 0;
-  }
+  background: #3b82f6;
 }

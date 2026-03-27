@@ -1,0 +1,133 @@
+/* Simple, clean design suitable for borewell services */
+
+.service-page {
+  min-height: 100vh;
+  background-color: #f8f9fa; /* Light, clean background */
+  color: #333;
+  padding-top: 80px; /* Space for Navbar */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.service-container {
+  width: 95%;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 20px 0;
+}
+
+/* Header styling */
+.service-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.service-header p {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+/* Service cards layout */
+.service-cards {
+  display: grid;
+  grid-template-columns: 1fr; /* Mobile default */
+  gap: 20px;
+}
+
+/* Individual service card */
+.service-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.service-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* Icon styling */
+.service-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+  color: #ff4c60; /* highlight color */
+}
+
+/* Card titles and descriptions */
+.service-card h3 {
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+}
+
+.service-card p {
+  font-size: 1rem;
+  margin-bottom: 12px;
+  color: #555;
+}
+
+/* Button styling */
+.service-card button {
+  background-color: #ff4c60;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.service-card button:hover {
+  background-color: #ff1f3d;
+}
+
+/* Tablet view */
+@media (min-width: 600px) and (max-width: 1024px) {
+  .service-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+  }
+}
+
+/* Desktop view */
+@media (min-width: 1025px) {
+  .service-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Small mobile tweaks */
+@media (max-width: 599px) {
+  .service-header h1 {
+    font-size: 2rem;
+  }
+
+  .service-header p {
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+  }
+
+  .service-card h3 {
+    font-size: 1.2rem;
+  }
+
+  .service-card p {
+    font-size: 0.9rem;
+  }
+
+  .service-card button {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+}

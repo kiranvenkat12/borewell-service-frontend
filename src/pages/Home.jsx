@@ -4,12 +4,13 @@ import ImageSlider from "../components/ImageSlider";
 import StatsCounter from "../components/StatsCounter";
 import WhyChooseUs from "../components/WhyChooseUs";
 import Footer from "../components/Footer";
+import Banner from "../components/Banner";
 import "./Home.css";
 const Home = () => {
   return (
     <div className="home-container">
       <Navbar />
-      <RequestCard />
+      <Banner />
       <ImageSlider />
       <StatsCounter />
       <WhyChooseUs />

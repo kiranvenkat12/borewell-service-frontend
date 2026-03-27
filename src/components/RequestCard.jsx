@@ -1,16 +1,17 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./RequestCard.css";
 
 const RequestCard = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     phone1: "",
     phone2: "",
-    email: "",
     serviceType: "",
     depth: "",
     address: "",
-    area: "",
     pincode: "",
     description: "",
   });
@@ -35,7 +36,13 @@ const RequestCard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.phone1 || !formData.serviceType || !formData.address || !formData.area || !formData.pincode) {
+    if (
+      !formData.name ||
+      !formData.phone1 ||
+      !formData.serviceType ||
+      !formData.address ||
+      !formData.pincode
+    ) {
       alert("Please fill all mandatory fields");
       return;
     }
@@ -53,7 +60,6 @@ const RequestCard = () => {
 
       const data = await res.json();
       alert("Request Submitted Successfully!");
-
       console.log(data);
     } catch (err) {
       alert("Something went wrong");
@@ -66,6 +72,11 @@ const RequestCard = () => {
     <div className="request-wrapper">
       <div className="request-card">
 
+        {/* 🔙 BACK BUTTON */}
+        <div className="back-btn" onClick={() => navigate("/")}>
+          Back
+        </div>
+
         <h2 className="card-title">🚰 Borewell Services</h2>
         <p className="subtitle">Fast • Trusted • Doorstep Service</p>
 
@@ -77,31 +88,24 @@ const RequestCard = () => {
           </div>
 
           <div className="form-group">
-            <label>📞 Primary Phone *</label>
+            <label>📞 Mobile Phone *</label>
             <input type="tel" name="phone1" onChange={handleChange} placeholder="10-digit number" />
           </div>
 
           <div className="form-group">
-            <label>📞 Secondary Phone</label>
+            <label>📞 Second Mobile Phone(optional)</label>
             <input type="tel" name="phone2" onChange={handleChange} />
           </div>
 
           <div className="form-group">
-            <label>📧 Email</label>
-            <input type="email" name="email" onChange={handleChange} />
-          </div>
-
-          {/* ✅ SERVICE BUTTONS INSTEAD OF DROPDOWN */}
-          <div className="form-group">
             <label>⚙️ Service Type *</label>
-
             <div className="service-options">
               {[
-                { label: "Drilling", value: "drilling" },
-                { label: "Motor Install", value: "motor_install" },
-                { label: "Repair", value: "repair" },
-                { label: "Motor Removal", value: "motor_remove" },
-                { label: "Camera", value: "camera" },
+                { label: "Borewell Drilling", value: "drilling" },
+                { label: "New Motor Install", value: "motor_install" },
+                { label: "Motor Repair", value: "repair" },
+                { label: "Stuck Motor Removal", value: "motor_remove" },
+                { label: "Borewell Camera scanning", value: "camera" },
                 { label: "Other", value: "other" },
               ].map((item) => (
                 <button
@@ -129,11 +133,6 @@ const RequestCard = () => {
           <div className="form-group">
             <label>📍 Address *</label>
             <input type="text" name="address" onChange={handleChange} />
-          </div>
-
-          <div className="form-group">
-            <label>🏙️ Area *</label>
-            <input type="text" name="area" onChange={handleChange} />
           </div>
 
           <div className="form-group">
