@@ -1,18 +1,26 @@
 import { Navigate, useLocation } from "react-router-dom";
 
 const ProtectedRoute = ({ children, role }) => {
-  const token = role === "admin"
-    ? localStorage.getItem("adminToken")
-    : localStorage.getItem("workerToken");
+  // Check token based on role
+  const token =
+    role === "admin"
+      ? localStorage.getItem("adminToken")
+      : localStorage.getItem("workerToken");
 
   const location = useLocation();
 
-  // ❌ No token → redirect to appropriate login
   if (!token) {
-    return <Navigate to={role === "admin" ? "/admin/login" : "/worker/login"} state={{ from: location }} replace />;
+    // Redirect to login of correct role
+    return (
+      <Navigate
+        to={role === "admin" ? "/admin/login" : "/worker/login"}
+        state={{ from: location }}
+        replace
+      />
+    );
   }
 
-  // ✅ Token exists → allow access
+  // Token exists → allow access
   return children;
 };
 

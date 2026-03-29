@@ -18,42 +18,64 @@ const WorkerDashboard = () => {
     fetchData();
   }, []);
 
+  // ✅ Fetch assigned requests
   const fetchData = async () => {
+    const workerId = localStorage.getItem("workerId");
+
+    if (!workerId) {
+      alert("Worker not logged in properly");
+      window.location.href = "/worker/login";
+      return;
+    }
+
     try {
       const data = await getAssignedRequests();
-      setRequests(data);
+
+      // ✅ Remove completed tasks (case-insensitive)
+      const activeRequests = data.filter(
+        (req) => req.status?.toLowerCase() !== "completed"
+      );
+
+      setRequests(activeRequests);
     } catch (error) {
       console.error("Error fetching tasks:", error);
       alert("Failed to fetch tasks. Please login again.");
     }
   };
 
+  // ✅ Start Work
   const handleStart = async (id) => {
     try {
       await startRequest(id);
-      fetchData();
+      fetchData(); // refresh list
     } catch (error) {
       console.error("Error starting request:", error);
       alert("Failed to start request");
     }
   };
 
+  // ✅ Show modal to complete
   const handleCompleteClick = (id) => {
     setSelectedId(id);
     setShowCompleteModal(true);
   };
 
+  // ✅ Confirm completion
   const confirmComplete = async () => {
     try {
       await completeRequest(selectedId);
+
+      // ✅ Remove task immediately from UI
+      setRequests((prev) => prev.filter((req) => req.id !== selectedId));
       setShowCompleteModal(false);
-      fetchData();
+      setSelectedId(null);
     } catch (error) {
       console.error("Error completing request:", error);
       alert("Failed to complete request");
     }
   };
 
+  // ✅ Logout
   const handleLogoutClick = () => {
     localStorage.removeItem("workerToken");
     localStorage.removeItem("workerId");
@@ -75,25 +97,26 @@ const WorkerDashboard = () => {
 
       <div className="worker-cards">
         {requests.length === 0 && <p>No assigned requests</p>}
-        {requests.map((req) => (
-          <div className="worker-card" key={req.id}>
-            <p><b>Service:</b> {req.service_type}</p>
-            <p><b>Name:</b> {req.name}</p>
-            <p><b>Phone:</b> {req.phone_primary}</p>
-            <p><b>Address:</b> {req.address}</p>
-            <p><b>Description:</b> {req.description}</p>
 
-            {req.status === "assigned" || req.status === "pending" ? (
-              <button onClick={() => handleStart(req.id)}>Start Work</button>
-            ) : req.status === "in_progress" ? (
-              <button onClick={() => handleCompleteClick(req.id)}>
-                Complete
-              </button>
-            ) : (
-              <span className="status-completed">Completed</span>
-            )}
-          </div>
-        ))}
+        {requests.map((req) => {
+          const status = req.status?.toLowerCase();
+
+          return (
+            <div className="worker-card" key={req.id}>
+              <p><b>Service:</b> {req.service_type}</p>
+              <p><b>Name:</b> {req.name}</p>
+              <p><b>Phone:</b> {req.phone_primary}</p>
+              <p><b>Address:</b> {req.address}</p>
+              <p><b>Description:</b> {req.description}</p>
+
+              {["pending", "assigned"].includes(status) ? (
+                <button onClick={() => handleStart(req.id)}>Start Work</button>
+              ) : status === "in progress" ? (
+                <button onClick={() => handleCompleteClick(req.id)}>Complete</button>
+              ) : null}
+            </div>
+          );
+        })}
       </div>
 
       {showCompleteModal && (

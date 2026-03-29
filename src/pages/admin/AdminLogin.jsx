@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { registerAdmin, loginAdmin } from "../../services/adminService";
 import "./AdminAuth.css";
 import AuthHeader from "../../components/AuthHeader";
@@ -6,6 +7,7 @@ import Footer from "../../components/Footer";
 
 const AdminLogin = () => {
   const [isRegister, setIsRegister] = useState(true);
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -47,7 +49,6 @@ const AdminLogin = () => {
         confirmPassword: "",
         adminId: "",
       });
-
     } catch (err) {
       alert(err.detail?.[0]?.msg || err.message || "Register failed");
     }
@@ -62,18 +63,14 @@ const AdminLogin = () => {
 
       // 🔥 Extract token (FastAPI usually gives access_token)
       const token = res.access_token || res.token;
-
-      if (!token) {
-        throw new Error("No token received from backend");
-      }
+      if (!token) throw new Error("No token received from backend");
 
       // 🔥 Store token
       localStorage.setItem("adminToken", token);
-
       alert("Login Success");
 
-      // 🔥 Redirect
-      window.location.href = "/admin/dashboard";
+      // ✅ Navigate using React Router
+      navigate("/admin/dashboard");
 
     } catch (err) {
       alert(err.detail?.[0]?.msg || err.message || "Login failed");
@@ -100,7 +97,6 @@ const AdminLogin = () => {
                   onChange={handleChange}
                   required
                 />
-
                 <input
                   type="text"
                   name="adminId"

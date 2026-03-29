@@ -16,39 +16,37 @@ const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/request" element={<RequestPage />} />
-        <Route path="*" element={<NotFound />} />
-        <Route path="/services" element={<ServicePage />} />
+  {/* Admin */}
+  <Route path="/admin/login" element={<AdminLogin />} />
+  <Route path="/admin/register" element={<AdminRegister />} />
+  <Route
+    path="/admin/dashboard"
+    element={
+      <ProtectedRoute role="admin">
+        <AdminDashboard />
+      </ProtectedRoute>
+    }
+  />
 
-        {/* Admin */}
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/register" element={<AdminRegister />} />
-        <Route
-  path="/admin/dashboard"
-  element={
-    <ProtectedRoute>
-      <AdminDashboard />
-    </ProtectedRoute>
-  }
-/>
-{/* Worker */}
-<Route path="/worker/login" element={<WorkerLogin />} />
-<Route
-  path="/worker/dashboard"
-  element={
-    <ProtectedRoute>
-      <WorkerDashboard />
-    </ProtectedRoute>
-  }
-/>
+  {/* Worker */}
+  <Route path="/worker/login" element={<WorkerLogin />} />
+  <Route
+    path="/worker/dashboard"
+    element={
+      <ProtectedRoute role="worker">
+        <WorkerDashboard />
+      </ProtectedRoute>
+    }
+  />
 
-        
-       
+  {/* Other pages */}
+  <Route path="/" element={<Home />} />
+  <Route path="/services" element={<ServicePage />} />
+  <Route path="/request" element={<RequestPage />} />
 
-        {/* Worker */}
-        <Route path="/worker/login" element={<WorkerLogin />} />
-        </Routes>
+  {/* Catch all */}
+  <Route path="*" element={<NotFound />} />
+</Routes>
     </BrowserRouter>
   );
 };

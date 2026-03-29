@@ -13,11 +13,11 @@ export const getAssignedRequests = async () => {
 
   try {
     const res = await axios.get(`${API_URL}/worker/${workerId}/requests`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     });
-    return res.data;
+
+    // ✅ Filter out completed tasks just in case backend returns them
+    return res.data.filter((req) => req.status !== "completed");
   } catch (err) {
     throw err;
   }
@@ -29,9 +29,7 @@ export const startRequest = async (service_request_id) => {
   return axios.put(
     `${API_URL}/${service_request_id}/start`,
     {},
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    }
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 };
 
@@ -41,8 +39,6 @@ export const completeRequest = async (service_request_id) => {
   return axios.put(
     `${API_URL}/${service_request_id}/complete`,
     {},
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    }
+    { headers: { Authorization: `Bearer ${token}` } }
   );
 };

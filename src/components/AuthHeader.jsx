@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import "./AuthHeader.css";
+import logo from "../assets/logo.png";
 
 const AuthHeader = ({ title }) => {
   const navigate = useNavigate();
@@ -8,7 +9,7 @@ const AuthHeader = ({ title }) => {
     <div className="auth-header">
       
       <div className="auth-left">
-        <img src="/logo.png" alt="logo" className="auth-logo" />
+        <img src={logo} alt="logo" className="auth-logo" />
       </div>
 
       <div className="auth-center">

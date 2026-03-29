@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Confetti from "react-confetti"; // ✅ install via: npm install react-confetti
 import "./RequestCard.css";
 import { createRequest } from "../services/requestService";
 
@@ -18,6 +19,7 @@ const RequestCard = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,7 +32,7 @@ const RequestCard = () => {
   const handleServiceSelect = (value) => {
     setFormData((prev) => ({
       ...prev,
-      service_type: value, // ✅ FIXED
+      service_type: value,
     }));
   };
 
@@ -39,8 +41,8 @@ const RequestCard = () => {
 
     if (
       !formData.name ||
-      !formData.phone_primary ||   // ✅ FIXED
-      !formData.service_type ||    // ✅ FIXED
+      !formData.phone_primary ||
+      !formData.service_type ||
       !formData.address ||
       !formData.pincode
     ) {
@@ -50,12 +52,12 @@ const RequestCard = () => {
 
     try {
       setLoading(true);
+      await createRequest(formData);
 
-      const data = await createRequest(formData);
+      // ✅ Show success popup with confetti
+      setShowSuccessPopup(true);
 
-      alert("Request Submitted Successfully!");
-      console.log(data);
-
+      // Reset form
       setFormData({
         name: "",
         phone_primary: "",
@@ -66,6 +68,12 @@ const RequestCard = () => {
         pincode: "",
         description: "",
       });
+
+      // ✅ Auto navigate after 3 seconds
+      setTimeout(() => {
+        setShowSuccessPopup(false);
+        navigate("/services");
+      }, 5000);
 
     } catch (err) {
       console.error(err);
@@ -87,7 +95,7 @@ const RequestCard = () => {
         <p className="subtitle">Fast • Trusted • Doorstep Service</p>
 
         <form onSubmit={handleSubmit} className="form">
-
+          {/* Name */}
           <div className="form-group">
             <label>👤 Name *</label>
             <input
@@ -98,6 +106,7 @@ const RequestCard = () => {
             />
           </div>
 
+          {/* Primary Phone */}
           <div className="form-group">
             <label>📞 Mobile Phone *</label>
             <input
@@ -108,6 +117,7 @@ const RequestCard = () => {
             />
           </div>
 
+          {/* Secondary Phone */}
           <div className="form-group">
             <label>📞 Second Mobile Phone(optional)</label>
             <input
@@ -118,6 +128,7 @@ const RequestCard = () => {
             />
           </div>
 
+          {/* Service Type */}
           <div className="form-group">
             <label>⚙️ Service Type *</label>
             <div className="service-options">
@@ -141,6 +152,7 @@ const RequestCard = () => {
             </div>
           </div>
 
+          {/* Borewell Depth */}
           {(formData.service_type === "motor_install" ||
             formData.service_type === "repair" ||
             formData.service_type === "motor_remove" ||
@@ -150,12 +162,13 @@ const RequestCard = () => {
               <input
                 type="number"
                 name="borewell_depth"
-                value={formData.borewell_depth} // ✅ fixed spacing typo
+                value={formData.borewell_depth}
                 onChange={handleChange}
               />
             </div>
           )}
 
+          {/* Address */}
           <div className="form-group">
             <label>📍 Address *</label>
             <input
@@ -166,6 +179,7 @@ const RequestCard = () => {
             />
           </div>
 
+          {/* Pincode */}
           <div className="form-group">
             <label>📮 Pincode *</label>
             <input
@@ -176,6 +190,7 @@ const RequestCard = () => {
             />
           </div>
 
+          {/* Description */}
           <div className="form-group">
             <label>📝 Description</label>
             <textarea
@@ -188,9 +203,22 @@ const RequestCard = () => {
           <button type="submit" className="submit-btn" disabled={loading}>
             {loading ? "Submitting..." : "🚀 Submit Request"}
           </button>
-
         </form>
       </div>
+
+      {/* ✅ Success Popup */}
+      {showSuccessPopup && (
+        <div className="success-popup">
+          <Confetti width={window.innerWidth} height={window.innerHeight} />
+          <div className="popup-content">
+            <h2>🎉 Request Received!</h2>
+            <p>
+              Our team got your request. We will call you within an hour. <br />
+              Thank you for contacting us!
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -51,29 +51,33 @@ const WorkerLogin = () => {
     }
   };
 
-  // ===== LOGIN WORKER =====
   const handleLogin = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      const { phone, password } = formData;
+  try {
+    const { phone, password } = formData;
 
-      const res = await axios.post("http://127.0.0.1:8000/worker-registers/login", {
+    const res = await axios.post(
+      "http://127.0.0.1:8000/worker-registers/login",
+      {
         phonenumber: phone,
         password,
-      });
+      }
+    );
 
-      // ✅ Save token and workerId properly
-      localStorage.setItem("workerId", res.data.id);
-      localStorage.setItem("workerToken", res.data.token);
-      localStorage.setItem("workerName", res.data.name);
+    // ✅ FIXED HERE
+    localStorage.setItem("workerId", res.data.id);
+    localStorage.setItem("workerToken", res.data.access_token);
+    localStorage.setItem("workerName", res.data.name);
 
-      navigate("/worker/dashboard");
-    } catch (err) {
-      console.error("Login failed", err);
-      alert(err.response?.data?.detail || "Login failed");
-    }
-  };
+    console.log("workerId:", localStorage.getItem("workerId"));
+
+    navigate("/worker/dashboard");
+  } catch (err) {
+    console.error("Login failed", err);
+    alert(err.response?.data?.detail || "Login failed");
+  }
+};
 
   return (
     <div>
