@@ -1,35 +1,23 @@
-// 🔥 Dummy Worker APIs
+import axios from "axios";
 
-export const registerWorker = (data) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (!data.name || !data.phone || !data.confirmPhone) {
-        reject({ message: "Fill all mandatory fields" });
-      } else if (data.phone !== data.confirmPhone) {
-        reject({ message: "Phone numbers do not match" });
-      } else if (data.password !== data.confirmPassword) {
-        reject({ message: "Passwords do not match" });
-      } else {
-        resolve({
-          message: "Worker registered successfully",
-        });
-      }
-    }, 1000);
-  });
+const API = "http://127.0.0.1:8000/worker-registers";
+
+// 🔥 Register Worker
+export const registerWorker = async (data) => {
+  try {
+    const res = await axios.post(`${API}/workers`, data); // note: /workers
+    return res.data;
+  } catch (err) {
+    throw err.response?.data || { message: "Registration failed" };
+  }
 };
 
-export const loginWorker = (data) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      // Dummy login check
-      if (data.phone === "9999999999" && data.password === "1234") {
-        resolve({
-          token: "worker-token",
-          worker: { phone: data.phone },
-        });
-      } else {
-        reject({ message: "Invalid phone or password" });
-      }
-    }, 1000);
-  });
+// 🔥 Login Worker
+export const loginWorker = async (payload) => {
+  try {
+    const res = await axios.post(`${API}/login`, payload); // note: /login
+    return res.data;
+  } catch (err) {
+    throw err.response?.data || { message: "Login failed" };
+  }
 };

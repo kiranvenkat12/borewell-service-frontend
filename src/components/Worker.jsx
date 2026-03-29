@@ -9,9 +9,20 @@ const Workers = ({ selectedReq }) => {
   }, []);
 
   const fetchWorkers = async () => {
+  try {
     const res = await getAllWorkers();
+
     setWorkers(res.data);
-  };
+  } catch (err) {
+    console.error(err);
+
+    // 🔥 if token invalid → logout
+    if (err.status === 401 || err.message === "Unauthorized") {
+      localStorage.removeItem("adminToken");
+      window.location.href = "/admin-login";
+    }
+  }
+};
 
   const handleAssign = async (workerId) => {
     if (!selectedReq) return alert("No request selected");

@@ -5,12 +5,7 @@
   min-height: calc(100vh - 70px);
   padding: 20px;
 
-  /* Background image and overlay */
-  background: 
-    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1950&q=80') 
-    center/cover no-repeat;
-}
+
 
 
 .worker-auth-card {

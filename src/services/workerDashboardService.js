@@ -1,39 +1,48 @@
-let assignedRequests = [
-  {
-    id: 1,
-    name: "Ravi",
-    phone: "9999999999",
-    serviceType: "Motor Installation",
-    address: "Hyderabad",
-    description: "Motor not working",
-    status: "pending",
-  },
-  {
-    id: 2,
-    name: "Kiran",
-    phone: "8888888888",
-    serviceType: "Borewell Repair",
-    address: "Vijayawada",
-    description: "Low water flow",
-    status: "pending",
-  },
-];
+import axios from "axios";
 
-// Get assigned requests
-export const getAssignedRequests = () => {
-  return Promise.resolve({ data: assignedRequests });
+const API_URL = "http://localhost:8000/service-requests";
+
+// ✅ Get assigned tasks for logged-in worker
+export const getAssignedRequests = async () => {
+  const workerId = localStorage.getItem("workerId");
+  const token = localStorage.getItem("workerToken");
+
+  if (!workerId || !token) {
+    throw new Error("Worker not logged in");
+  }
+
+  try {
+    const res = await axios.get(`${API_URL}/worker/${workerId}/requests`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
 };
 
-// Start work
-export const startRequest = (id) => {
-  assignedRequests = assignedRequests.map((req) =>
-    req.id === id ? { ...req, status: "in-progress" } : req
+// ✅ Start a task
+export const startRequest = async (service_request_id) => {
+  const token = localStorage.getItem("workerToken");
+  return axios.put(
+    `${API_URL}/${service_request_id}/start`,
+    {},
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
   );
-  return Promise.resolve({ message: "Work started" });
 };
 
-// Complete work
-export const completeRequest = (id) => {
-  assignedRequests = assignedRequests.filter((req) => req.id !== id);
-  return Promise.resolve({ message: "Work completed" });
+// ✅ Complete a task
+export const completeRequest = async (service_request_id) => {
+  const token = localStorage.getItem("workerToken");
+  return axios.put(
+    `${API_URL}/${service_request_id}/complete`,
+    {},
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
 };

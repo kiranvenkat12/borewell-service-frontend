@@ -1,64 +1,97 @@
-// 🔥 Dummy Data
-let requests = [
-  {
-    id: 1,
-    name: "Ravi",
-    phone: "9876543210",
-    serviceType: "Borewell Repair",
-    borewellDepth: "120ft",
-    address: "123 Street",
-    area: "Sector 21",
-    pinCode: "110011",
-    description: "Motor not working",
-    status: "pending",
-  },
-  {
-    id: 2,
-    name: "Kiran",
-    phone: "9123456780",
-    serviceType: "Motor Repair",
-    borewellDepth: "",
-    address: "45 Road",
-    area: "Sector 10",
-    pinCode: "110022",
-    description: "",
-    status: "completed",
-  },
-];
+import axios from "axios";
 
-let workers = [
-  { id: 101, name: "Worker A" },
-  { id: 102, name: "Worker B" },
-];
+const API = "http://127.0.0.1:8000";
 
-// 🔥 APIs
-export const getAllRequests = () => Promise.resolve({ data: requests });
-export const getAllWorkers = () => Promise.resolve({ data: workers });
+// 🔥 Helper: attach token
+const getAuthHeaders = () => {
+  const token = localStorage.getItem("adminToken");
 
-export const assignWorker = (requestId, workerId) => {
-  return new Promise((resolve) => {
-    requests = requests.map((req) =>
-      req.id === Number(requestId)
-        ? { ...req, workerId, status: "assigned" }
-        : req
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+};
+
+// 🔥 GET ALL SERVICE REQUESTS
+export const getAllRequests = async () => {
+  try {
+    const res = await axios.get(`${API}/service-requests/`, getAuthHeaders());
+    return res;
+  } catch (err) {
+    throw err.response?.data || { message: "Failed to fetch requests" };
+  }
+};
+
+// 🔥 GET ALL WORKERS
+export const getAllWorkers = async () => {
+  try {
+    const res = await axios.get(`${API}/worker-registers/workers`, getAuthHeaders());
+    return res;
+  } catch (err) {
+    throw err.response?.data || { message: "Failed to fetch workers" };
+  }
+};
+
+// 🔥 ASSIGN WORKER TO REQUEST
+export const assignWorker = async (requestId, workerId) => {
+  try {
+    const res = await axios.put(
+      `${API}/service-requests/`, // ✅ FIXED
+      {
+        request_id: requestId,  // ✅ match backend schema
+        worker_id: workerId,
+      },
+      getAuthHeaders()
     );
-    resolve({ message: "Worker assigned" });
-  });
+    return res.data;
+  } catch (err) {
+    throw err.response?.data || { message: "Assignment failed" };
+  }
 };
 
-export const getAssignedRequests = () => {
-  return Promise.resolve({
-    data: requests.filter((req) => req.status === "assigned"),
-  });
+// 🔥 GET ASSIGNED REQUESTS
+export const getAssignedRequests = async () => {
+  try {
+    const res = await axios.get(
+      `${API}/service-requests/assigned`,
+      getAuthHeaders()
+    );
+    return res;
+  } catch (err) {
+    throw err.response?.data || { message: "Failed to fetch assigned requests" };
+  }
 };
 
-export const deleteCompleted = (id) => {
-  return new Promise((resolve) => {
+// 🔥 DELETE COMPLETED REQUESTS
+export const deleteCompleted = async (id = null) => {
+  try {
     if (id) {
-      requests = requests.filter((req) => req.id !== id);
+      // delete single
+      const res = await axios.delete(
+        `${API}/service-requests/${id}`,
+        getAuthHeaders()
+      );
+      return res.data;
     } else {
-      requests = requests.filter((req) => req.status !== "completed");
+      // delete all completed
+      const res = await axios.delete(
+        `${API}/service-requests/completed`,
+        getAuthHeaders()
+      );
+      return res.data;
     }
-    resolve({ message: "Completed requests removed" });
-  });
+  } catch (err) {
+    throw err.response?.data || { message: "Delete failed" };
+  }
+};
+
+// 🔥 GET ALL COMPLETED REQUESTS
+export const getCompletedRequests = async () => {
+  try {
+    const res = await axios.get(`${API}/service-requests/completed`, getAuthHeaders());
+    return res;
+  } catch (err) {
+    throw err.response?.data || { message: "Failed to fetch completed requests" };
+  }
 };

@@ -3,6 +3,7 @@ import { registerAdmin, loginAdmin } from "../../services/adminService";
 import "./AdminAuth.css";
 import AuthHeader from "../../components/AuthHeader";
 import Footer from "../../components/Footer";
+
 const AdminLogin = () => {
   const [isRegister, setIsRegister] = useState(true);
 
@@ -21,93 +22,143 @@ const AdminLogin = () => {
     });
   };
 
+  // ✅ REGISTER
   const handleRegister = async (e) => {
     e.preventDefault();
+
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
     try {
       const res = await registerAdmin(formData);
-      alert(res.message);
-      setIsRegister(false); // switch to login
+
+      alert(res.message || "Registered successfully");
+
+      // switch to login
+      setIsRegister(false);
+
+      // clear form
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        adminId: "",
+      });
+
     } catch (err) {
-      alert(err.message);
+      alert(err.detail?.[0]?.msg || err.message || "Register failed");
     }
   };
 
+  // ✅ LOGIN
   const handleLogin = async (e) => {
     e.preventDefault();
+
     try {
       const res = await loginAdmin(formData);
+
+      // 🔥 Extract token (FastAPI usually gives access_token)
+      const token = res.access_token || res.token;
+
+      if (!token) {
+        throw new Error("No token received from backend");
+      }
+
+      // 🔥 Store token
+      localStorage.setItem("adminToken", token);
+
       alert("Login Success");
-      console.log(res);
+
+      // 🔥 Redirect
+      window.location.href = "/admin/dashboard";
+
     } catch (err) {
-      alert(err.message);
+      alert(err.detail?.[0]?.msg || err.message || "Login failed");
     }
   };
 
   return (
     <>
-    <AuthHeader title={isRegister ? "Admin Register" : "Admin Login"} />
-    <div className="auth-container">
+      <AuthHeader title={isRegister ? "Admin Register" : "Admin Login"} />
 
-      <div className="auth-card">
-        <h2>{isRegister ? "Admin Register" : "Admin Login"}</h2>
+      <div className="auth-container">
+        <div className="auth-card">
+          <h2>{isRegister ? "Admin Register" : "Admin Login"}</h2>
 
-        <form onSubmit={isRegister ? handleRegister : handleLogin}>
+          <form onSubmit={isRegister ? handleRegister : handleLogin}>
 
-          {isRegister && (
-            <>
-              <input
-                type="text"
-                name="name"
-                placeholder="Name"
-                onChange={handleChange}
-              />
+            {isRegister && (
+              <>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
 
-              <input
-                type="text"
-                name="adminId"
-                placeholder="Admin ID"
-                onChange={handleChange}
-              />
-            </>
-          )}
+                <input
+                  type="text"
+                  name="adminId"
+                  placeholder="Admin ID"
+                  value={formData.adminId}
+                  onChange={handleChange}
+                  required
+                />
+              </>
+            )}
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            onChange={handleChange}
-          />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            onChange={handleChange}
-          />
-
-          {isRegister && (
             <input
               type="password"
-              name="confirmPassword"
-              placeholder="Confirm Password"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
               onChange={handleChange}
+              required
             />
-          )}
 
-          <button type="submit">
-            {isRegister ? "Register" : "Login"}
-          </button>
-        </form>
+            {isRegister && (
+              <input
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
+            )}
 
-        <p onClick={() => setIsRegister(!isRegister)} className="toggle">
-          {isRegister
-            ? "Already registered? Login here"
-            : "New admin? Register first"}
-        </p>
+            <button type="submit">
+              {isRegister ? "Register" : "Login"}
+            </button>
+          </form>
+
+          <p
+            onClick={() => setIsRegister(!isRegister)}
+            className="toggle"
+            style={{ cursor: "pointer" }}
+          >
+            {isRegister
+              ? "Already registered? Login here"
+              : "New admin? Register first"}
+          </p>
+        </div>
       </div>
 
-    </div>
-    <Footer />
+      <Footer />
     </>
   );
 };

@@ -2,11 +2,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "../pages/Home";
 import ServicePage from "../pages/ServicePage";
+import ProtectedRoute from "../components/ProtectedRoute";
 // Admin
 import AdminLogin from "../pages/admin/AdminLogin";
 import AdminRegister from "../pages/admin/AdminRegister";
 import AdminDashboard from "../pages/admin/AdminDashboard";
-import ManageWorkers from "../pages/admin/ManageWorkers";
 import NotFound from "../pages/NotFound";
 import RequestPage from "../pages/RequestPage"; 
 // Worker
@@ -24,13 +24,31 @@ const AppRoutes = () => {
         {/* Admin */}
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/register" element={<AdminRegister />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/admin/workers" element={<ManageWorkers />} />
+        <Route
+  path="/admin/dashboard"
+  element={
+    <ProtectedRoute>
+      <AdminDashboard />
+    </ProtectedRoute>
+  }
+/>
+{/* Worker */}
+<Route path="/worker/login" element={<WorkerLogin />} />
+<Route
+  path="/worker/dashboard"
+  element={
+    <ProtectedRoute>
+      <WorkerDashboard />
+    </ProtectedRoute>
+  }
+/>
+
+        
+       
 
         {/* Worker */}
         <Route path="/worker/login" element={<WorkerLogin />} />
-        <Route path="/worker/dashboard" element={<WorkerDashboard />} />
-      </Routes>
+        </Routes>
     </BrowserRouter>
   );
 };
