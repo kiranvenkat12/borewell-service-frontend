@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "https://your-backend-name.onrender.com";
+const API = "https://borewell-backend.onrender.com";
 
 // 🔥 Helper: attach token
 const getAuthHeaders = () => {

@@ -42,7 +42,7 @@ const WorkerLogin = () => {
         confirm_password: formData.confirmPassword,
       };
 
-      await axios.post("https://your-backend-name.onrender.com/worker-registers/workers", payload);
+      await axios.post("https://borewell-backend.onrender.com/worker-registers/workers", payload);
       alert("Worker registered successfully!");
       setIsRegister(false); // switch to login form
     } catch (err) {
@@ -58,7 +58,7 @@ const WorkerLogin = () => {
     const { phone, password } = formData;
 
     const res = await axios.post(
-      "https://your-backend-name.onrender.com/worker-registers/login",
+      "https://borewell-backend.onrender.com/worker-registers/login",
       {
         phonenumber: phone,
         password,
