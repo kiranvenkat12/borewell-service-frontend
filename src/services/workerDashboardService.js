@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8000/service-requests";
+const API_URL = "https://your-backend-name.onrender.com/service-requests";
 
 // ✅ Get assigned tasks for logged-in worker
 export const getAssignedRequests = async () => {

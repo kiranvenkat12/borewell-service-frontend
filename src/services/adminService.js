@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "http://127.0.0.1:8000/admin";
+const API = "https://your-backend-name.onrender.com/admin";
 
 // 🔥 REGISTER
 export const registerAdmin = async (data) => {

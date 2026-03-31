@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "http://127.0.0.1:8000/worker-registers";
+const API = "https://your-backend-name.onrender.com/worker-registers";
 
 // 🔥 Register Worker
 export const registerWorker = async (data) => {
