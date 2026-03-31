@@ -23,7 +23,7 @@ const Footer = () => {
           <h4>Contact</h4>
           <p>📞 7702486592</p>
           <p>📍 Hyderabad</p>
-          <p>✉️ support@borewell.com</p>
+          
         </div>
 
       </div>

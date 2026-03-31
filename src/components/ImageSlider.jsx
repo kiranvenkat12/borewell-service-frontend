@@ -1,13 +1,18 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ added
 import "./ImageSlider.css";
-import img1 from "../assets/homepage.png";
-import img2 from "../assets/homepage.png";
-import img3 from "../assets/image.png";
 
-const images = [img1, img2, img3, img1, img2,img2,img3];
+import img1 from "../assets/motorpumps.jpg";
+import img2 from "../assets/bore.jpeg";
+import img3 from "../assets/chain.jpeg";
+import img4 from "../assets/camara.jpeg";
+import img5 from "../assets/pipes.png";
+
+const images = [img1, img2, img3, img4, img5];
 
 const ImageSlider = () => {
   const [current, setCurrent] = useState(2);
+  const navigate = useNavigate(); // ✅ init navigation
 
   // Auto slide
   useEffect(() => {
@@ -26,6 +31,11 @@ const ImageSlider = () => {
     setCurrent((prev) =>
       prev === 0 ? images.length - 1 : prev - 1
     );
+  };
+
+  // ✅ handle click
+  const handleImageClick = () => {
+    navigate("/request");
   };
 
   return (
@@ -56,7 +66,12 @@ const ImageSlider = () => {
 
             return (
               <div className={`slide ${position}`} key={index}>
-                <img src={img} alt="slide" />
+                <img
+                  src={img}
+                  alt="slide"
+                  onClick={handleImageClick} // ✅ click added
+                  style={{ cursor: "pointer" }} // UX improvement
+                />
               </div>
             );
           })}
