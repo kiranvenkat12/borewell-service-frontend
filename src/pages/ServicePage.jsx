@@ -6,33 +6,38 @@ import Navbar from "../components/Navbar";
 const services = [
   {
     title: "New Bore Drilling",
-    description: "Expert bore drilling services to ensure a reliable water source for your property.",
+    description: "Reliable drilling for strong water source",
     icon: "🛠️",
     value: "drilling",
+    color: "#d4f5e9",
   },
   {
     title: "Borewell Camera Scanning",
-    description: "Identify blockages and assess the condition of your borewell with precision camera scanning.",
+    description: "Detect issues with camera inspection",
     icon: "📷",
     value: "camera",
+    color: "#f3d9fa",
   },
   {
     title: "New Motor Installation",
-    description: "Professional installation of borewell motors to ensure efficient water pumping.",
+    description: "Install efficient pumping systems",
     icon: "⚙️",
     value: "motor_install",
+    color: "#ffe4c7",
   },
   {
     title: "Stuck Motor Removal",
-    description: "Safe and quick removal of stuck motors from borewells without damaging the structure.",
+    description: "Safe removal without damage",
     icon: "🔧",
     value: "motor_remove",
+    color: "#dbeafe",
   },
   {
     title: "Motor Repair",
-    description: "Repair and maintenance services to keep your borewell motor running smoothly.",
+    description: "Quick repair & maintenance",
     icon: "🔩",
     value: "repair",
+    color: "#e2f7d3",
   },
 ];
 
@@ -40,31 +45,48 @@ const ServicePage = () => {
   const navigate = useNavigate();
 
   const handleServiceClick = (serviceValue) => {
-    // Pass the selected service to the request page
     navigate("/request", { state: { serviceType: serviceValue } });
   };
 
   return (
     <div className="service-page">
       <Navbar />
-      <div className="service-container">
-        <header className="service-header">
-          <h1>Our Borewell Services</h1>
-          <p>Reliable and professional services for all your borewell needs.</p>
-        </header>
 
-        <div className="service-cards">
+      <div className="service-container">
+        {/* Header */}
+        <div className="service-header">
+          <h2>Borewell Services</h2>
+          <p>Choose the service you need</p>
+        </div>
+
+        {/* Featured Card */}
+        <div
+          className="featured-card"
+          onClick={() => handleServiceClick("drilling")}
+        >
+          <div>
+            <h3>New Bore Drilling</h3>
+            <p>Get best drilling service today</p>
+            <button>Book Now</button>
+          </div>
+          <div className="featured-icon">🛠️</div>
+        </div>
+
+        {/* Service List */}
+        <div className="service-list">
           {services.map((service, index) => (
             <div
-              className="service-card"
               key={index}
+              className="service-item"
+              style={{ background: service.color }}
               onClick={() => handleServiceClick(service.value)}
-              style={{ cursor: "pointer" }}
             >
-              <div className="service-icon">{service.icon}</div>
-              <h3>{service.title}</h3>
-              <p>{service.description}</p>
-              <button>Request Service</button>
+              <div className="icon">{service.icon}</div>
+              <div className="text">
+                <h4>{service.title}</h4>
+                <p>{service.description}</p>
+              </div>
+              <div className="arrow">›</div>
             </div>
           ))}
         </div>
