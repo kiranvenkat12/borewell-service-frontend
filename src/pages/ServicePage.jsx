@@ -1,52 +1,90 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ServicePage.css";
 import Navbar from "../components/Navbar";
+import Fotter from "../components/Footer"
 
+/* 🔥 Featured Auto Slider */
+const featuredServices = [
+  {
+    title: "New Bore Drilling",
+    description: "Get the best professional drilling service today",
+    icon: "🛠️",
+    value: "drilling",
+  },
+  {
+    title: "Camera Scanning",
+    description: "Inspect your borewell with advanced cameras",
+    icon: "📷",
+    value: "camera",
+  },
+  {
+    title: "Motor Installation",
+    description: "Install efficient pumping systems",
+    icon: "⚙️",
+    value: "motor_install",
+  },
+];
+
+/* 🔥 All Services */
 const services = [
   {
     title: "New Bore Drilling",
     description: "Reliable drilling for strong water source",
     icon: "🛠️",
     value: "drilling",
-    color: "#d4f5e9",
+    color: "#e0f2fe",
   },
   {
     title: "Borewell Camera Scanning",
-    description: "Detect issues with camera inspection",
+    description: "Detect internal issues with inspection",
     icon: "📷",
     value: "camera",
-    color: "#f3d9fa",
+    color: "#dbeafe",
   },
   {
-    title: "New Motor Installation",
+    title: "Motor Installation",
     description: "Install efficient pumping systems",
     icon: "⚙️",
     value: "motor_install",
-    color: "#ffe4c7",
+    color: "#e5e7eb",
   },
   {
     title: "Stuck Motor Removal",
     description: "Safe removal without damage",
     icon: "🔧",
     value: "motor_remove",
-    color: "#dbeafe",
+    color: "#fef3c7",
   },
   {
     title: "Motor Repair",
     description: "Quick repair & maintenance",
     icon: "🔩",
     value: "repair",
-    color: "#e2f7d3",
+    color: "#dcfce7",
   },
 ];
 
 const ServicePage = () => {
   const navigate = useNavigate();
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleServiceClick = (serviceValue) => {
     navigate("/request", { state: { serviceType: serviceValue } });
   };
+
+  /* 🔥 Auto slide every 3 seconds */
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) =>
+        prev === featuredServices.length - 1 ? 0 : prev + 1
+      );
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const currentService = featuredServices[currentIndex];
 
   return (
     <div className="service-page">
@@ -54,25 +92,26 @@ const ServicePage = () => {
 
       <div className="service-container">
         {/* Header */}
-        <div className="service-header">
+        {/* <div className="service-header">
           <h2>Borewell Services</h2>
           <p>Choose the service you need</p>
-        </div>
+        </div> */}
 
-        {/* Featured Card */}
+        {/* 🔥 Featured Slider */}
         <div
           className="featured-card"
-          onClick={() => handleServiceClick("drilling")}
+          onClick={() => handleServiceClick(currentService.value)}
         >
-          <div>
-            <h3>New Bore Drilling</h3>
-            <p>Get best drilling service today</p>
+          <div className="featured-content">
+            <h3>{currentService.title}</h3>
+            <p>{currentService.description}</p>
             <button>Book Now</button>
           </div>
-          <div className="featured-icon">🛠️</div>
+
+          <div className="featured-icon">{currentService.icon}</div>
         </div>
 
-        {/* Service List */}
+        {/* 🔥 All Services */}
         <div className="service-list">
           {services.map((service, index) => (
             <div
@@ -82,15 +121,16 @@ const ServicePage = () => {
               onClick={() => handleServiceClick(service.value)}
             >
               <div className="icon">{service.icon}</div>
+
               <div className="text">
                 <h4>{service.title}</h4>
                 <p>{service.description}</p>
               </div>
-              <div className="arrow">›</div>
             </div>
           ))}
         </div>
       </div>
+      <Fotter/>
     </div>
   );
 };
