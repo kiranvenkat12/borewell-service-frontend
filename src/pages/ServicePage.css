@@ -1,133 +1,114 @@
-/* Simple, clean design suitable for borewell services */
-
 .service-page {
+  background: #f5f6fa;
   min-height: 100vh;
-  background-color: #f8f9fa; /* Light, clean background */
-  color: #333;
-  padding-top: 80px; /* Space for Navbar */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  padding-top: 70px;
 }
 
+/* Container */
 .service-container {
-  width: 95%;
-  max-width: 1200px;
-  margin: 0 auto;
-  text-align: center;
-  padding: 20px 0;
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
 }
 
-/* Header styling */
-.service-header h1 {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-  color: #222;
+/* Header */
+.service-header {
+  margin-bottom: 20px;
+}
+
+.service-header h2 {
+  font-size: 26px;
+  font-weight: bold;
 }
 
 .service-header p {
-  font-size: 1.1rem;
-  color: #555;
-  margin-bottom: 30px;
-  line-height: 1.5;
+  color: #777;
 }
 
-/* Service cards layout */
-.service-cards {
-  display: grid;
-  grid-template-columns: 1fr; /* Mobile default */
-  gap: 20px;
-}
-
-/* Individual service card */
-.service-card {
-  background: #fff;
+/* Featured card */
+.featured-card {
+  background: linear-gradient(135deg, #c8facc, #fbc2eb);
+  border-radius: 20px;
   padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  cursor: pointer;
+}
+
+.featured-card h3 {
+  margin-bottom: 5px;
+}
+
+.featured-card button {
+  margin-top: 10px;
+  background: black;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+}
+
+.featured-icon {
+  font-size: 50px;
+}
+
+/* Service list */
+.service-list {
   display: flex;
   flex-direction: column;
+  gap: 15px;
+}
+
+/* Each item */
+.service-item {
+  display: flex;
   align-items: center;
-  text-align: center;
+  justify-content: space-between;
+  padding: 15px;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-.service-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+.service-item:hover {
+  transform: scale(1.02);
 }
 
-/* Icon styling */
-.service-icon {
-  font-size: 3rem;
-  margin-bottom: 12px;
-  color: #ff4c60; /* highlight color */
+/* Icon */
+.icon {
+  font-size: 28px;
+  margin-right: 10px;
 }
 
-/* Card titles and descriptions */
-.service-card h3 {
-  font-size: 1.4rem;
-  margin-bottom: 8px;
+/* Text */
+.text {
+  flex: 1;
 }
 
-.service-card p {
-  font-size: 1rem;
-  margin-bottom: 12px;
+.text h4 {
+  margin: 0;
+}
+
+.text p {
+  font-size: 14px;
   color: #555;
 }
 
-/* Button styling */
-.service-card button {
-  background-color: #ff4c60;
-  color: #fff;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s ease;
-}
-
-.service-card button:hover {
-  background-color: #ff1f3d;
-}
-
-/* Tablet view */
-@media (min-width: 600px) and (max-width: 1024px) {
-  .service-cards {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
-  }
+/* Arrow */
+.arrow {
+  font-size: 22px;
 }
 
 /* Desktop view */
-@media (min-width: 1025px) {
-  .service-cards {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-/* Small mobile tweaks */
-@media (max-width: 599px) {
-  .service-header h1 {
-    font-size: 2rem;
+@media (min-width: 768px) {
+  .service-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .service-header p {
-    font-size: 0.95rem;
-    margin-bottom: 20px;
-  }
-
-  .service-card h3 {
-    font-size: 1.2rem;
-  }
-
-  .service-card p {
-    font-size: 0.9rem;
-  }
-
-  .service-card button {
-    padding: 8px 16px;
-    font-size: 0.9rem;
+  .featured-card {
+    padding: 30px;
   }
 }
