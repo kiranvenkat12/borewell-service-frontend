@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import "./Areas.css";
-
+import image1 from "../assets/area1.jpeg";
+import image2 from "../assets/area2.jpeg";
+import image3 from "../assets/area3.png";
+import image4 from "../assets/area4.jpg";
+import image5 from "../assets/area5.jpeg";
 const allAreas = [
   "Kukatpally","Miyapur","Gachibowli","Madhapur","Hitech City","Kondapur",
   "Ameerpet","Punjagutta","Banjara Hills","Jubilee Hills",
@@ -13,12 +17,11 @@ const allAreas = [
 ];
 
 const images = [
-  "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789",
-  "https://images.unsplash.com/photo-1509395176047-4a66953fd231",
-  "https://images.unsplash.com/photo-1581092335397-9583eb92d232",
-  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-  "https://images.unsplash.com/photo-1590650153855-d9e808231d41",
-  "https://images.unsplash.com/photo-1570129477492-45c003edd2be"
+  image1,
+  image2,
+  image3,
+  image4,
+  image5
 ];
 
 const Areas = () => {
