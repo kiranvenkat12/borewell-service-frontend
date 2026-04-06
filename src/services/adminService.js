@@ -5,7 +5,7 @@ const API = "https://borewell-service-production.up.railway.app";
 // 🔥 REGISTER
 export const registerAdmin = async (data) => {
   try {
-    const res = await axios.post(`${API}`, {
+    const res = await axios.post(`${API}/admin/`, {
       name: data.name,
       email: data.email,
       new_password: data.password,
