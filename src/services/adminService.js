@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "https://borewell-backend.onrender.com/admin";
+const API = "https://borewell-service-production.up.railway.app";
 
 // 🔥 REGISTER
 export const registerAdmin = async (data) => {
