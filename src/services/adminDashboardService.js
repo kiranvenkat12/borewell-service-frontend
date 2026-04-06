@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "https://borewell-backend.onrender.com";
+const API = "https://borewell-service-production.up.railway.app";
 
 // 🔥 Helper: attach token
 const getAuthHeaders = () => {
