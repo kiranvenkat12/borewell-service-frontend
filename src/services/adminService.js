@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API = "https://borewell-service-production.up.railway.app";
 
-// 🔥 REGISTER
+// ✅ REGISTER ADMIN
 export const registerAdmin = async (data) => {
   try {
     const res = await axios.post(`${API}/admin/`, {
@@ -12,7 +12,6 @@ export const registerAdmin = async (data) => {
       confirm_password: data.confirmPassword,
       admin_id: data.adminId,
     });
-
     return res.data;
   } catch (err) {
     console.error("Register Error:", err.response?.data);
@@ -20,17 +19,15 @@ export const registerAdmin = async (data) => {
   }
 };
 
-// 🔥 LOGIN
+// ✅ LOGIN ADMIN
 export const loginAdmin = async (data) => {
   try {
-    const res = await axios.post(`${API}/login`, {
+    const res = await axios.post(`${API}/admin/login`, {  // <-- changed here
       email: data.email,
       password: data.password,
     });
-
     const token = res.data.access_token;
     localStorage.setItem("adminToken", token);
-
     return res.data;
   } catch (err) {
     console.error("Login Error:", err.response?.data);
