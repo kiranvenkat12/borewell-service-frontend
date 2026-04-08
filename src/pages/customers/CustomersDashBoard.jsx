@@ -6,10 +6,12 @@ import "./CustomersDashboard.css";
 const CustomerDashboard = () => {
   const [borewellData, setBorewellData] = useState([]);
   const [loading, setLoading] = useState(true);
+
   const navigate = useNavigate();
 
   const token = localStorage.getItem("customerToken");
   const phoneNumber = localStorage.getItem("customerPhone");
+  const customerName = localStorage.getItem("customerName") || "Customer";
 
   // 🔐 Redirect if not logged in
   useEffect(() => {
@@ -19,12 +21,10 @@ const CustomerDashboard = () => {
     }
   }, [token, phoneNumber, navigate]);
 
-  // 📡 Fetch Borewell Data
+  // 📡 Fetch Data
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("Phone:", phoneNumber);
-
         const res = await axios.get(
           `https://borewell-service-production.up.railway.app/admin/borewell-info/${phoneNumber}`,
           {
@@ -34,110 +34,77 @@ const CustomerDashboard = () => {
           }
         );
 
-        console.log("API Response:", res.data);
-
         setBorewellData(res.data);
       } catch (err) {
-        console.error("Dashboard fetch error:", err.response?.data);
+        console.error(err);
         alert("Failed to fetch dashboard data");
       } finally {
         setLoading(false);
       }
     };
 
-    if (phoneNumber) {
-      fetchData();
-    }
+    if (phoneNumber) fetchData();
   }, [token, phoneNumber]);
 
-  if (loading) return <p>Loading...</p>;
-  if (!borewellData || borewellData.length === 0)
-    return <p>No borewell data available</p>;
+  // 🔓 Logout
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/customer/login");
+  };
+
+  if (loading) return <p className="loading">Loading...</p>;
 
   return (
-    <div className="dashboard-container">
-      <h1>Customer Dashboard</h1>
+    <div className="dashboard">
 
+      {/* 🔝 HEADER */}
+      <div className="top-header">
+        <h3>Hello, {customerName}</h3>
+        <button onClick={handleLogout} className="logout-btn">
+          Logout
+        </button>
+      </div>
+
+      {/* 📌 MAIN HEADER */}
+      <div className="main-header">
+        <h1>Customer Dashboard</h1>
+        <button
+          className="request-btn"
+          onClick={() => navigate("/customer/request")}
+        >
+          + Raise Request
+        </button>
+      </div>
+
+      {/* ❌ EMPTY STATE */}
+      {(!borewellData || borewellData.length === 0) && (
+        <div className="empty-state">
+          <p>Our team is working on your bore details.</p>
+          <p>It will be updated soon.</p>
+        </div>
+      )}
+
+      {/* ✅ DATA */}
       {borewellData.map((bore, index) => (
-        <div className="borewell-card" key={index}>
+        <div className="card" key={index}>
           <h2>Borewell #{index + 1}</h2>
 
-          {/* 📊 Borewell Details */}
-          <div className="borewell-details">
+          <div className="grid">
             <p><strong>Depth:</strong> {bore.borewell_data.borewell_depth} m</p>
-            <p><strong>Casing Depth:</strong> {bore.borewell_data.casing_depth} m</p>
+            <p><strong>Casing:</strong> {bore.borewell_data.casing_depth} m</p>
             <p><strong>Water Level:</strong> {bore.borewell_data.water_level} m</p>
-            <p><strong>Pipe Size:</strong> {bore.borewell_data.pipe_size}</p>
-            <p><strong>Pipe Joint:</strong> {bore.borewell_data.pipe_joint}</p>
-            <p><strong>Water Quality:</strong> {bore.borewell_data.Water_Quality}</p>
-
-            <p><strong>TDS:</strong> {bore.borewell_data.tds}</p>
             <p><strong>pH:</strong> {bore.borewell_data.ph}</p>
-            <p><strong>Hardness:</strong> {bore.borewell_data.hardness}</p>
+            <p><strong>TDS:</strong> {bore.borewell_data.tds}</p>
             <p><strong>Iron:</strong> {bore.borewell_data.iron}</p>
-            <p><strong>Chlorine:</strong> {bore.borewell_data.chlorine}</p>
-            <p><strong>Nitrate:</strong> {bore.borewell_data.nitrate}</p>
-
-            <p><strong>Water Color:</strong> {bore.borewell_data.water_color}</p>
-            <p><strong>Water Smell:</strong> {bore.borewell_data.water_smell}</p>
           </div>
 
-          {/* 🧠 Analysis */}
-          <div className="borewell-analysis">
-            <h3>Analysis</h3>
-            <p><strong>Status:</strong> {bore.analysis.status}</p>
+          <div className="analysis">
+            <h3>Status: {bore.analysis.status}</h3>
             <p><strong>Issues:</strong> {bore.analysis.issues.join(", ") || "None"}</p>
-
-            {/* 💡 Solutions */}
-            <h4>Solutions</h4>
-
-            <p><strong>Low Cost:</strong></p>
-            <ul>
-              {bore.analysis.solutions.low_cost.map((item, i) => (
-                <li key={i}>{item}</li>
-              ))}
-            </ul>
-
-            <p><strong>Medium Cost:</strong></p>
-            <ul>
-              {bore.analysis.solutions.medium_cost.map((item, i) => (
-                <li key={i}>{item}</li>
-              ))}
-            </ul>
-
-            <p><strong>High Cost:</strong></p>
-            <ul>
-              {bore.analysis.solutions.high_cost.map((item, i) => (
-                <li key={i}>{item}</li>
-              ))}
-            </ul>
-
-            {/* 🛠️ Product Recommendations */}
-            <h3>Product Recommendations</h3>
-
-            <p><strong>Drinking:</strong></p>
-            <ul>
-              {bore.recommendations.drinking.low.map((item, i) => (
-                <li key={i}>{item}</li>
-              ))}
-            </ul>
-
-            <p><strong>Bathing:</strong></p>
-            <ul>
-              {bore.recommendations.bathing.low.map((item, i) => (
-                <li key={i}>{item}</li>
-              ))}
-            </ul>
-
-            <p><strong>Washing:</strong></p>
-            <ul>
-              {bore.recommendations.washing.low.map((item, i) => (
-                <li key={i}>{item}</li>
-              ))}
-            </ul>
           </div>
         </div>
       ))}
+
     </div>
   );
 };

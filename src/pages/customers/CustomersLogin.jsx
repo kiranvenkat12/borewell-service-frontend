@@ -93,6 +93,7 @@ const CustomerLogin = () => {
       // ✅ store
       localStorage.setItem("customerToken", token);
       localStorage.setItem("customerPhone", formData.phone.trim());
+      localStorage.setItem("customerName", response.data.customer_name);
 
       login("customer", token);
 
