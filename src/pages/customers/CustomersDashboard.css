@@ -91,6 +91,39 @@
   text-align: center;
   margin-top: 2rem;
 }
+/* Download button */
+.download-btn {
+  background: #111827;
+  color: white;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  width: 95%;
+  max-width: 500px;
+  background: white;
+  border-radius: 10px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
 
 /* 📱 Mobile */
 @media (max-width: 600px) {

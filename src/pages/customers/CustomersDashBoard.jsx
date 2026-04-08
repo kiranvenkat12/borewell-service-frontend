@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./CustomersDashboard.css";
+import RequestCard from "../components/RequestCard";
+import jsPDF from "jspdf";
 
 const CustomerDashboard = () => {
   const [borewellData, setBorewellData] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const navigate = useNavigate();
+  const [showRequestModal, setShowRequestModal] = useState(false);
 
   const token = localStorage.getItem("customerToken");
   const phoneNumber = localStorage.getItem("customerPhone");
@@ -16,9 +16,9 @@ const CustomerDashboard = () => {
   // 🔐 Auth Check
   useEffect(() => {
     if (!token || !phoneNumber) {
-      navigate("/customer/login");
+      window.location.href = "/customer/login";
     }
-  }, [token, phoneNumber, navigate]);
+  }, [token, phoneNumber]);
 
   // 📡 Fetch Data
   useEffect(() => {
@@ -27,15 +27,11 @@ const CustomerDashboard = () => {
         const res = await axios.get(
           `https://borewell-service-production.up.railway.app/admin/borewell-info/${phoneNumber}`,
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
-
         setBorewellData(res.data || []);
-      } catch (err) {
-        console.log("No data or API issue");
+      } catch {
         setBorewellData([]);
       } finally {
         setLoading(false);
@@ -47,11 +43,60 @@ const CustomerDashboard = () => {
 
   // 🔓 Logout
   const handleLogout = () => {
-    const confirmLogout = window.confirm("Are you sure you want to logout?");
-    if (!confirmLogout) return;
-
+    if (!window.confirm("Are you sure you want to logout?")) return;
     localStorage.clear();
-    navigate("/");
+    window.location.href = "/";
+  };
+
+  // 📄 PDF DOWNLOAD
+  const downloadPDF = (bore) => {
+    const doc = new jsPDF();
+
+    let y = 10;
+
+    doc.setFontSize(16);
+    doc.text("Borewell Report", 10, y);
+    y += 10;
+
+    doc.setFontSize(12);
+
+    // Borewell Data
+    Object.entries(bore.borewell_data || {}).forEach(([key, value]) => {
+      if (value !== null && value !== undefined && value !== "") {
+        doc.text(`${key}: ${value}`, 10, y);
+        y += 7;
+      }
+    });
+
+    y += 5;
+
+    // Analysis
+    if (bore.analysis?.status) {
+      doc.text(`Status: ${bore.analysis.status}`, 10, y);
+      y += 7;
+    }
+
+    if (bore.analysis?.issues?.length) {
+      doc.text(`Issues: ${bore.analysis.issues.join(", ")}`, 10, y);
+      y += 7;
+    }
+
+    const addList = (title, list) => {
+      if (list?.length) {
+        doc.text(title, 10, y);
+        y += 6;
+        list.forEach((item) => {
+          doc.text(`- ${item}`, 12, y);
+          y += 6;
+        });
+      }
+    };
+
+    addList("Low Cost Solutions:", bore.analysis?.solutions?.low_cost);
+    addList("Medium Cost Solutions:", bore.analysis?.solutions?.medium_cost);
+    addList("High Cost Solutions:", bore.analysis?.solutions?.high_cost);
+
+    doc.save("borewell-report.pdf");
   };
 
   if (loading) return <p className="loading">Loading...</p>;
@@ -72,7 +117,7 @@ const CustomerDashboard = () => {
         <h1>Customer Dashboard</h1>
         <button
           className="request-btn"
-          onClick={() => navigate("/services")}
+          onClick={() => setShowRequestModal(true)}
         >
           + Raise Request
         </button>
@@ -87,79 +132,65 @@ const CustomerDashboard = () => {
         </div>
       )}
 
-      {/* ✅ FULL SAFE DATA */}
+      {/* ✅ DATA */}
       {borewellData.map((bore, index) => (
         <div className="card" key={index}>
           <h2>Borewell #{index + 1}</h2>
 
-          {/* 📊 Borewell Data */}
+          {/* 📄 DOWNLOAD BUTTON */}
+          <button
+            className="download-btn"
+            onClick={() => downloadPDF(bore)}
+          >
+            Download PDF
+          </button>
+
+          {/* 📊 DATA */}
           <div className="grid">
             {Object.entries(bore.borewell_data || {})
-              .filter(([_, value]) => value !== null && value !== undefined && value !== "")
-              .map(([key, value]) => (
-                <p key={key}>
-                  <strong>{key.replace(/_/g, " ")}:</strong> {String(value)}
+              .filter(([_, v]) => v !== null && v !== "")
+              .map(([k, v]) => (
+                <p key={k}>
+                  <strong>{k.replace(/_/g, " ")}:</strong> {String(v)}
                 </p>
               ))}
           </div>
 
-          {/* 🧠 Analysis */}
+          {/* 🧠 ANALYSIS */}
           <div className="analysis">
-
-            {bore.analysis?.status && (
-              <h3>Status: {bore.analysis.status}</h3>
-            )}
+            {bore.analysis?.status && <h3>Status: {bore.analysis.status}</h3>}
 
             {bore.analysis?.issues?.length > 0 && (
-              <p>
-                <strong>Issues:</strong> {bore.analysis.issues.join(", ")}
-              </p>
+              <p><strong>Issues:</strong> {bore.analysis.issues.join(", ")}</p>
             )}
 
-            {(bore.analysis?.solutions?.low_cost?.length > 0 ||
-              bore.analysis?.solutions?.medium_cost?.length > 0 ||
-              bore.analysis?.solutions?.high_cost?.length > 0) && (
-              <>
-                <h4>Solutions</h4>
-
-                {bore.analysis?.solutions?.low_cost?.length > 0 && (
-                  <>
-                    <p><strong>Low Cost:</strong></p>
-                    <ul>
-                      {bore.analysis.solutions.low_cost.map((item, i) => (
-                        <li key={i}>{item}</li>
-                      ))}
-                    </ul>
-                  </>
-                )}
-
-                {bore.analysis?.solutions?.medium_cost?.length > 0 && (
-                  <>
-                    <p><strong>Medium Cost:</strong></p>
-                    <ul>
-                      {bore.analysis.solutions.medium_cost.map((item, i) => (
-                        <li key={i}>{item}</li>
-                      ))}
-                    </ul>
-                  </>
-                )}
-
-                {bore.analysis?.solutions?.high_cost?.length > 0 && (
-                  <>
-                    <p><strong>High Cost:</strong></p>
-                    <ul>
-                      {bore.analysis.solutions.high_cost.map((item, i) => (
-                        <li key={i}>{item}</li>
-                      ))}
-                    </ul>
-                  </>
-                )}
-
-              </>
-            )}
+            {["low_cost", "medium_cost", "high_cost"].map((type) => (
+              bore.analysis?.solutions?.[type]?.length > 0 && (
+                <div key={type}>
+                  <p><strong>{type.replace("_", " ")}:</strong></p>
+                  <ul>
+                    {bore.analysis.solutions[type].map((i, idx) => (
+                      <li key={idx}>{i}</li>
+                    ))}
+                  </ul>
+                </div>
+              )
+            ))}
           </div>
         </div>
       ))}
+
+      {/* 🔥 MODAL */}
+      {showRequestModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <RequestCard
+              isModal={true}
+              onClose={() => setShowRequestModal(false)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
