@@ -13,5 +13,5 @@ export const loginCustomer = async (data) => {
   const res = await axios.post(`${API}/login`, data, {
     headers: { "Content-Type": "application/json" },
   });
-  return res.data;
+  return res.data; // only the response body
 };

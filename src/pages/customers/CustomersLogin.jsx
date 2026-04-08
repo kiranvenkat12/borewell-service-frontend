@@ -69,14 +69,9 @@ const CustomerLogin = () => {
  const handleLogin = async (e) => {
   e.preventDefault();
   try {
-    const res = await loginCustomer({
-      phoneNumber: formData.phone,
-      password: formData.password
-    });
-
-    console.log("Login Response:", res.data); // 🔹 Debug
-
-    const token = res.data.access_token;
+   const res = await loginCustomer({ phoneNumber: formData.phone, password: formData.password });
+console.log("Login Response:", res.data);
+const token = res.access_token;
 
     if (!token) {
       return alert("No token received");
