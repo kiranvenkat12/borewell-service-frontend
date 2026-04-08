@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "https://your-backend-url/customer";
+const API = "https://borewell-service-production.up.railway.app/customer-registrations";
 
 export const registerCustomer = async (data) => {
   const res = await axios.post(`${API}/register`, data);

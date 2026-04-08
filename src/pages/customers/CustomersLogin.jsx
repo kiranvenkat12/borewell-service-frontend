@@ -3,17 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { registerCustomer, loginCustomer } from "../../services/customerService";
 import AuthHeader from "../../components/AuthHeader";
 import Footer from "../../components/Footer";
-import "./CustomersLogin.css"; 
+import "./CustomersLogin.css";
+
 const CustomerAuth = () => {
   const [isRegister, setIsRegister] = useState(true);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
+    phone: "",
+    confirmPhone: "",
     password: "",
     confirmPassword: "",
-    phone: "",
   });
 
   const handleChange = (e) => {
@@ -23,40 +24,63 @@ const CustomerAuth = () => {
     });
   };
 
-  // ✅ REGISTER CUSTOMER
+  // ✅ REGISTER
   const handleRegister = async (e) => {
     e.preventDefault();
 
+    // 🔥 Phone validation
+    if (formData.phone !== formData.confirmPhone) {
+      alert("Phone numbers do not match");
+      return;
+    }
+
+    // 🔥 Password validation
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match");
       return;
     }
 
     try {
-      const res = await registerCustomer(formData);
+      const payload = {
+        name: formData.name,
+        phone: formData.phone,
+        password: formData.password,
+      };
 
-      alert(res.message || "Customer Registered Successfully");
+      const res = await registerCustomer(payload);
+
+      alert(res.message || "Registered Successfully");
 
       setIsRegister(false);
 
       setFormData({
         name: "",
-        email: "",
+        phone: "",
+        confirmPhone: "",
         password: "",
         confirmPassword: "",
-        phone: "",
       });
+
     } catch (err) {
-      alert(err.detail?.[0]?.msg || err.message || "Register failed");
+      alert(
+        err.response?.data?.detail ||
+        err.message ||
+        "Registration failed"
+      );
     }
   };
 
-  // ✅ LOGIN CUSTOMER
+  // ✅ LOGIN
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      const res = await loginCustomer(formData);
+      const payload = {
+        phone: formData.phone,
+        password: formData.password,
+      };
+
+      const res = await loginCustomer(payload);
 
       const token = res.access_token || res.token;
       if (!token) throw new Error("No token received");
@@ -65,10 +89,13 @@ const CustomerAuth = () => {
 
       alert("Login Success");
 
-      navigate("/customer/dashboard"); // 🔥 change route
+      navigate("/customer/dashboard");
 
     } catch (err) {
-      alert(err.detail?.[0]?.msg || err.message || "Login failed");
+      alert(
+        err.response?.data?.detail ||
+        "Invalid phone number or password"
+      );
     }
   };
 
@@ -94,24 +121,35 @@ const CustomerAuth = () => {
                 />
 
                 <input
-                  type="text"
+                  type="tel"
                   name="phone"
                   placeholder="Phone Number"
                   value={formData.phone}
                   onChange={handleChange}
                   required
                 />
+
+                <input
+                  type="tel"
+                  name="confirmPhone"
+                  placeholder="Confirm Phone Number"
+                  value={formData.confirmPhone}
+                  onChange={handleChange}
+                  required
+                />
               </>
             )}
 
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
+            {!isRegister && (
+              <input
+                type="tel"
+                name="phone"
+                placeholder="Phone Number"
+                value={formData.phone}
+                onChange={handleChange}
+                required
+              />
+            )}
 
             <input
               type="password"

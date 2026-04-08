@@ -11,6 +11,7 @@ import RequestPage from "../pages/RequestPage";
 // Worker
 import WorkerLogin from "../pages/worker/WorkerLogin";
 import WorkerDashboard from "../pages/worker/WorkerDashboard";
+import CustomersLogin from "../pages/customers/CustomersLogin";
 const AppRoutes = () => {
   return (
     <BrowserRouter>
