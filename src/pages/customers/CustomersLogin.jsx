@@ -72,6 +72,8 @@ const CustomerLogin = () => {
    const res = await loginCustomer({ phoneNumber: formData.phone, password: formData.password });
 console.log("Login Response:", res.data);
 const token = res.access_token;
+localStorage.setItem("customerToken", response.data.access_token);
+localStorage.setItem("customerPhone", response.data.phoneNumber);
 
     if (!token) {
       return alert("No token received");
