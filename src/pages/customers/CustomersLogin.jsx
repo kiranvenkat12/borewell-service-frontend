@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { registerCustomer, loginCustomer } from "../../services/customerService";
+import axios from "axios";
 import AuthHeader from "../../components/AuthHeader";
 import Footer from "../../components/Footer";
 import "./CustomersLogin.css";
@@ -31,13 +31,11 @@ const CustomerLogin = () => {
     e.preventDefault();
 
     if (formData.phone !== formData.confirmPhone) {
-      alert("Phone numbers do not match");
-      return;
+      return alert("Phone numbers do not match");
     }
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match");
-      return;
+      return alert("Passwords do not match");
     }
 
     try {
@@ -47,9 +45,14 @@ const CustomerLogin = () => {
         password: formData.password,
       };
 
-      const res = await registerCustomer(payload);
+      const response = await axios.post(
+        "https://borewell-service-production.up.railway.app/customer-registrations/register",
+        payload
+      );
 
-      alert(res.message || "Registered Successfully");
+      console.log("Register Response:", response.data);
+
+      alert(response.data.message || "Registered Successfully");
 
       setIsRegister(false);
       setFormData({
@@ -61,43 +64,46 @@ const CustomerLogin = () => {
       });
 
     } catch (err) {
-      console.error("Register Error:", err.response?.data || err.message);
+      console.error("Register Error:", err);
       alert(err.response?.data?.detail || "Registration failed");
     }
   };
 
+  // ✅ LOGIN
   const handleLogin = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const res = await loginCustomer({
-      phoneNumber: formData.phone.trim(),
-      password: formData.password,
-    });
+    try {
+      const response = await axios.post(
+        "https://borewell-service-production.up.railway.app/customer-registrations/login",
+        {
+          phoneNumber: formData.phone.trim(),
+          password: formData.password,
+        }
+      );
 
-    // ✅ res itself is the response data
-    console.log("Login Response:", res);
+      console.log("Login Response:", response.data);
 
-    const token = res.access_token;
+      const token = response.data.access_token;
 
-    if (!token) {
-      return alert("No token received");
+      if (!token) {
+        return alert("No token received");
+      }
+
+      // ✅ store
+      localStorage.setItem("customerToken", token);
+      localStorage.setItem("customerPhone", formData.phone.trim());
+
+      login("customer", token);
+
+      alert("Login Successful");
+      navigate("/customer/dashboard");
+
+    } catch (err) {
+      console.error("Login Error:", err);
+      alert(err.response?.data?.detail || "Invalid phone number or password");
     }
-
-    // ✅ store properly
-    localStorage.setItem("customerToken", token);
-    localStorage.setItem("customerPhone", formData.phone.trim());
-
-    login("customer", token);
-
-    alert("Login Successful");
-    navigate("/customer/dashboard");
-
-  } catch (err) {
-    console.error("Login Error:", err);
-    alert(err?.detail || "Invalid phone number or password");
-  }
-};
+  };
 
   return (
     <>
