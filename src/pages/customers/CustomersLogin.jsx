@@ -75,10 +75,10 @@ const CustomerLogin = () => {
       password: formData.password,
     });
 
-    // ✅ ALWAYS use res.data
-    console.log("Login Response:", res.data);
+    // ✅ res itself is the response data
+    console.log("Login Response:", res);
 
-    const token = res.data.access_token;
+    const token = res.access_token;
 
     if (!token) {
       return alert("No token received");
@@ -94,8 +94,8 @@ const CustomerLogin = () => {
     navigate("/customer/dashboard");
 
   } catch (err) {
-    console.error("Login Error:", err.response?.data || err.message);
-    alert(err.response?.data?.detail || "Invalid phone number or password");
+    console.error("Login Error:", err);
+    alert(err?.detail || "Invalid phone number or password");
   }
 };
 
