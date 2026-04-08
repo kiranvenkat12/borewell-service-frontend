@@ -29,7 +29,7 @@ const BorewellAssignment = () => {
 
   // ✅ Use token from context (NOT localStorage)
   const { tokens } = useAuth();
-  const token = tokens.admin;
+const token = tokens.admin || localStorage.getItem("adminToken");
 
   const handleChange = (e) => {
     setFormData({
@@ -64,20 +64,24 @@ const BorewellAssignment = () => {
     };
 
     const res = await axios.post(
-      `https://borewell-service-production.up.railway.app/admin/borewell-info/${customerNum}`,
-      formattedData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+  `https://borewell-service-production.up.railway.app/admin/borewell-info/${customerNum}`,
+  formattedData,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`, 
+      "Content-Type": "application/json"
+    },
+  }
+);
 
     alert("Borewell info submitted successfully ✅");
   } catch (err) {
     console.error(err);
     alert(err.response?.data?.detail || "Error submitting data ❌");
   }
+  console.log("Sending token:", token);
+console.log("Customer:", customerNum);
+console.log("Data:", formattedData);
 };
   return (
     <div className="borewell-container">
