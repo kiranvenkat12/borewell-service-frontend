@@ -66,24 +66,31 @@ const CustomerLogin = () => {
     }
   };
 
-  // ✅ LOGIN
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await loginCustomer({ phoneNumber: formData.phone, password: formData.password });
-      const token = res.data?.access_token || res.data?.token;
+ const handleLogin = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await loginCustomer({
+      phoneNumber: formData.phone,
+      password: formData.password
+    });
 
-      if (!token) return alert("No token received");
+    // Check token path according to your backend
+    const token = res.data?.access_token || res.data?.token || res.data?.data?.access_token;
 
-      login("customer", token);
-      alert("Login Successful");
-      navigate("/customer/dashboard");
-    } catch (err) {
-      console.error("Login Error:", err.response?.data || err.message);
-      alert(err.response?.data?.detail || "Invalid phone number or password");
-    }
-  };
+    if (!token) return alert("No token received");
 
+    // Store token in context and localStorage
+    login("customer", token);
+    localStorage.setItem("customerToken", token);
+
+    alert("Login Successful");
+    navigate("/customer/dashboard");
+
+  } catch (err) {
+    console.error("Login Error:", err.response?.data || err.message);
+    alert(err.response?.data?.detail || "Invalid phone number or password");
+  }
+};
   return (
     <>
       <AuthHeader title={isRegister ? "Customer Register" : "Customer Login"} />
