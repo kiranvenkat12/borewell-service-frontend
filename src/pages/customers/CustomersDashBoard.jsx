@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./CustomersDashboard.css";
-import RequestCard from "../components/RequestCard";
+import RequestCard from "../../components/RequestCard";
 import jsPDF from "jspdf";
 
 const CustomerDashboard = () => {
