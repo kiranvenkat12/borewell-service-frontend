@@ -28,7 +28,8 @@ const BorewellAssignment = () => {
   });
 
   // ✅ Use token from context (NOT localStorage)
-  const { token } = useAuth();
+  const { tokens } = useAuth();
+  const token = tokens.admin;
 
   const handleChange = (e) => {
     setFormData({
@@ -38,55 +39,46 @@ const BorewellAssignment = () => {
   };
 
   const handleSubmit = async () => {
-    if (!customerNum) {
-      alert("Enter customer mobile number");
-      return;
-    }
+  if (!customerNum) {
+    alert("Enter customer mobile number");
+    return;
+  }
 
-    if (!token) {
-      alert("You are not logged in ❌");
-      return;
-    }
+  if (!token) {
+    alert("You are not logged in ❌");
+    return;
+  }
 
-    try {
-      // ✅ Convert numeric fields properly
-      const formattedData = {
-        ...formData,
-        borewell_depth: Number(formData.borewell_depth),
-        casing_depth: Number(formData.casing_depth),
-        water_level: Number(formData.water_level),
-        tds: Number(formData.tds),
-        ph: Number(formData.ph),
-        hardness: Number(formData.hardness),
-        iron: Number(formData.iron),
-        chlorine: Number(formData.chlorine),
-        nitrate: Number(formData.nitrate),
-      };
+  try {
+    const formattedData = {
+      ...formData,
+      borewell_depth: Number(formData.borewell_depth),
+      casing_depth: Number(formData.casing_depth),
+      water_level: Number(formData.water_level),
+      tds: Number(formData.tds),
+      ph: Number(formData.ph),
+      hardness: Number(formData.hardness),
+      iron: Number(formData.iron),
+      chlorine: Number(formData.chlorine),
+      nitrate: Number(formData.nitrate),
+    };
 
-      const res = await axios.post(
-        `https://borewell-service-production.up.railway.app/admin/borewell-info/${customerNum}`,
-        formattedData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // ✅ correct token usage
-          },
-        }
-      );
+    const res = await axios.post(
+      `https://borewell-service-production.up.railway.app/admin/borewell-info/${customerNum}`,
+      formattedData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-      alert("Borewell info submitted successfully ✅");
-      console.log(res.data);
-    } catch (err) {
-      console.error(err);
-
-      // ✅ Better error message
-      alert(
-        err.response?.data?.detail ||
-        err.message ||
-        "Error submitting data ❌"
-      );
-    }
-  };
-
+    alert("Borewell info submitted successfully ✅");
+  } catch (err) {
+    console.error(err);
+    alert(err.response?.data?.detail || "Error submitting data ❌");
+  }
+};
   return (
     <div className="borewell-container">
       <h2>Borewell Assignment</h2>
