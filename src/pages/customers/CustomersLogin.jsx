@@ -4,10 +4,13 @@ import { registerCustomer, loginCustomer } from "../../services/customerService"
 import AuthHeader from "../../components/AuthHeader";
 import Footer from "../../components/Footer";
 import "./CustomersLogin.css";
+import {useAuth} from "../../services/AuthContext";
+
 
 const CustomerAuth = () => {
   const [isRegister, setIsRegister] = useState(true);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -66,38 +69,17 @@ const CustomerAuth = () => {
     }
   };
 
-  // ✅ LOGIN
   const handleLogin = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
+  const res = await loginCustomer({ phoneNumber: formData.phone, password: formData.password });
+  const token = res.data?.access_token || res.data?.token;
 
-    try {
-      const payload = {
-        phoneNumber: formData.phone.trim(),
-        password: formData.password,
-      };
+  if (!token) return alert("No token received");
 
-      console.log("Login Payload:", payload);
-
-      const res = await loginCustomer(payload);
-
-      // Get JWT token from backend
-      const token = res.access_token || res.token;
-      if (!token) throw new Error("No token received");
-
-      // Store token & phone number for future API calls
-      localStorage.setItem("customerToken", token);
-      localStorage.setItem("customerPhone", formData.phone.trim());
-
-      alert("Login Successful");
-
-      // Navigate to dashboard
-      navigate("/customer/dashboard");
-
-    } catch (err) {
-      console.error("Login Error:", err.response?.data);
-      alert(err.response?.data?.detail || "Invalid phone number or password");
-    }
-  };
+  login("customer", token);
+  alert("Login Successful");
+  navigate("/customer/dashboard");
+};
 
   return (
     <>

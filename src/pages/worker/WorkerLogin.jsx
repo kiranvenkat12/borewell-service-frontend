@@ -4,10 +4,11 @@ import axios from "axios";
 import AuthHeader from "../../components/AuthHeader";
 import Footer from "../../components/Footer";
 import "./WorkerAuth.css";
-
+import {useAuth} from "../../services/AuthContext";
 const WorkerLogin = () => {
   const [isRegister, setIsRegister] = useState(true);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -50,20 +51,20 @@ const WorkerLogin = () => {
       alert(err.response?.data?.detail || "Registration failed");
     }
   };
-
-  const handleLogin = async (e) => {
+const handleLogin = async (e) => {
   e.preventDefault();
+  const res = await axios.post("https://borewell-service-production.up.railway.app/worker-registers/login", {
+    phonenumber: formData.phone,
+    password: formData.password,
+  });
 
-  try {
-    const { phone, password } = formData;
+  const token = res.data.access_token;
+  if (!token) return alert("No token received");
 
-    const res = await axios.post(
-      "https://borewell-service-production.up.railway.app/worker-registers/login",
-      {
-        phonenumber: phone,
-        password,
-      }
-    );
+  login("worker", token);
+  alert("Login Successful");
+  navigate("/worker/dashboard");
+};
 
     // ✅ FIXED HERE
     localStorage.setItem("workerId", res.data.id);

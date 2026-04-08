@@ -1,9 +1,9 @@
-const ProtectedRoute = ({ children, role }) => {
-  let token;
-  if (role === "admin") token = localStorage.getItem("adminToken");
-  else if (role === "worker") token = localStorage.getItem("workerToken");
-  else if (role === "customer") token = localStorage.getItem("customerToken");
+import { Navigate, useLocation } from "react-router-dom";
+import { useAuth } from "../services/AuthContext";
 
+const ProtectedRoute = ({ children, role }) => {
+  const { tokens } = useAuth();
+  const token = tokens[role];   // Get the token for the specific role
   const location = useLocation();
 
   if (!token) {
@@ -18,3 +18,5 @@ const ProtectedRoute = ({ children, role }) => {
 
   return children;
 };
+
+export default ProtectedRoute;

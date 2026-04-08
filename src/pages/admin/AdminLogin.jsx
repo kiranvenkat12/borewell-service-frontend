@@ -4,10 +4,11 @@ import { registerAdmin, loginAdmin } from "../../services/adminService";
 import "./AdminAuth.css";
 import AuthHeader from "../../components/AuthHeader";
 import Footer from "../../components/Footer";
-
+import {useAuth} from "../../services/AuthContext";
 const AdminLogin = () => {
   const [isRegister, setIsRegister] = useState(true);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -54,28 +55,17 @@ const AdminLogin = () => {
     }
   };
 
-  // ✅ LOGIN
   const handleLogin = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
+  const res = await loginAdmin(formData);
+  const token = res.access_token || res.token;
 
-    try {
-      const res = await loginAdmin(formData);
-
-      // 🔥 Extract token (FastAPI usually gives access_token)
-      const token = res.access_token || res.token;
-      if (!token) throw new Error("No token received from backend");
-
-      // 🔥 Store token
-      localStorage.setItem("adminToken", token);
-      alert("Login Success");
-
-      // ✅ Navigate using React Router
-      navigate("/admin/dashboard");
-
-    } catch (err) {
-      alert(err.detail?.[0]?.msg || err.message || "Login failed");
-    }
-  };
+  if (!token) return alert("No token received");
+  
+  login("admin", token);  // ✅ Use Auth Context
+  alert("Login Successful");
+  navigate("/admin/dashboard");
+};
 
   return (
     <>
