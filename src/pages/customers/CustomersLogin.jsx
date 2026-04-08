@@ -66,40 +66,38 @@ const CustomerLogin = () => {
     }
   };
 
-  // ✅ LOGIN (FIXED)
   const handleLogin = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      const res = await loginCustomer({
-        phoneNumber: formData.phone,
-        password: formData.password,
-      });
+  try {
+    const res = await loginCustomer({
+      phoneNumber: formData.phone.trim(),
+      password: formData.password,
+    });
 
-      console.log("Login Response:", res);
+    // ✅ ALWAYS use res.data
+    console.log("Login Response:", res.data);
 
-      // ✅ FIX 1: correct data extraction
-      const token = res.access_token;
+    const token = res.data.access_token;
 
-      if (!token) {
-        return alert("No token received from server");
-      }
-
-      // ✅ FIX 2: store token + phone properly
-      localStorage.setItem("customerToken", token);
-      localStorage.setItem("customerPhone", formData.phone);
-
-      // ✅ FIX 3: update auth context
-      login("customer", token);
-
-      alert("Login Successful");
-      navigate("/customer/dashboard");
-
-    } catch (err) {
-      console.error("Login Error:", err.response?.data || err.message);
-      alert(err.response?.data?.detail || "Invalid phone number or password");
+    if (!token) {
+      return alert("No token received");
     }
-  };
+
+    // ✅ store properly
+    localStorage.setItem("customerToken", token);
+    localStorage.setItem("customerPhone", formData.phone.trim());
+
+    login("customer", token);
+
+    alert("Login Successful");
+    navigate("/customer/dashboard");
+
+  } catch (err) {
+    console.error("Login Error:", err.response?.data || err.message);
+    alert(err.response?.data?.detail || "Invalid phone number or password");
+  }
+};
 
   return (
     <>
