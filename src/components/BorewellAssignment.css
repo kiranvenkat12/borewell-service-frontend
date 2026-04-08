@@ -1,0 +1,28 @@
+.borewell-container {
+  padding: 20px;
+}
+
+.input-full {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.form-grid input {
+  padding: 8px;
+}
+
+.submit-btn {
+  margin-top: 20px;
+  padding: 12px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}

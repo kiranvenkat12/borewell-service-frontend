@@ -28,6 +28,9 @@ const Sidebar = ({ onSelect }) => {
             <li onClick={() => onSelect("workers")}>Workers</li>
             <li onClick={() => onSelect("assignedRequests")}>Assigned Requests</li>
             <li onClick={() => onSelect("completedRequests")}>Completed Requests</li>
+            <li onClick={() => onSelect("borewellAssignment")}>
+  Borewell Assignment
+</li>
           </ul>
 
           {/* Logout at bottom */}

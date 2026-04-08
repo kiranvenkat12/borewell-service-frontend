@@ -6,6 +6,7 @@ import ServiceRequests from "../../components/ServiceRequests";
 import Worker from "../../components/Worker";
 import AssignedRequests from "../../components/AssignedRequests";
 import CompletedRequests from "../../components/CompletedRequests";
+import BorewellAssignment from "../../components/BorewellAssignment";
 import "./AdminDashboard.css";
 
 const AdminDashboard = () => {
@@ -54,6 +55,7 @@ useEffect(() => {
         {selectedPage === "completedRequests" && (
           <CompletedRequests />
         )}
+        {selectedPage === "borewellAssignment" && <BorewellAssignment />}
       </div>
     </div>
   );
