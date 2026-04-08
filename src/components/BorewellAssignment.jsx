@@ -1,9 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
 import "./BorewellAssignment.css";
+import { useAuth } from "../../src/services/AuthContext";
 
 const BorewellAssignment = () => {
   const [customerNum, setCustomerNum] = useState("");
+
   const [formData, setFormData] = useState({
     borewell_depth: "",
     casing_depth: "",
@@ -25,6 +27,9 @@ const BorewellAssignment = () => {
     water_quality_status: "",
   });
 
+  // ✅ Use token from context (NOT localStorage)
+  const { token } = useAuth();
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -38,15 +43,32 @@ const BorewellAssignment = () => {
       return;
     }
 
+    if (!token) {
+      alert("You are not logged in ❌");
+      return;
+    }
+
     try {
-      const token = localStorage.getItem("adminToken");
+      // ✅ Convert numeric fields properly
+      const formattedData = {
+        ...formData,
+        borewell_depth: Number(formData.borewell_depth),
+        casing_depth: Number(formData.casing_depth),
+        water_level: Number(formData.water_level),
+        tds: Number(formData.tds),
+        ph: Number(formData.ph),
+        hardness: Number(formData.hardness),
+        iron: Number(formData.iron),
+        chlorine: Number(formData.chlorine),
+        nitrate: Number(formData.nitrate),
+      };
 
       const res = await axios.post(
-        `https://borewell-service-production.up.railway.app/admin/borewell-info/{customer_num}`,
-        formData,
+        `https://borewell-service-production.up.railway.app/admin/borewell-info/${customerNum}`,
+        formattedData,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`, // ✅ correct token usage
           },
         }
       );
@@ -55,7 +77,13 @@ const BorewellAssignment = () => {
       console.log(res.data);
     } catch (err) {
       console.error(err);
-      alert("Error submitting data ❌");
+
+      // ✅ Better error message
+      alert(
+        err.response?.data?.detail ||
+        err.message ||
+        "Error submitting data ❌"
+      );
     }
   };
 
