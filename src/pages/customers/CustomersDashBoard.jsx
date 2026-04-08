@@ -87,53 +87,76 @@ const CustomerDashboard = () => {
         </div>
       )}
 
-      {/* ✅ FULL DATA */}
+      {/* ✅ FULL SAFE DATA */}
       {borewellData.map((bore, index) => (
         <div className="card" key={index}>
           <h2>Borewell #{index + 1}</h2>
 
-          {/* 📊 Dynamic Data */}
+          {/* 📊 Borewell Data */}
           <div className="grid">
-            {Object.entries(bore.borewell_data || {}).map(([key, value]) => (
-              <p key={key}>
-                <strong>{key}:</strong> {String(value)}
-              </p>
-            ))}
+            {Object.entries(bore.borewell_data || {})
+              .filter(([_, value]) => value !== null && value !== undefined && value !== "")
+              .map(([key, value]) => (
+                <p key={key}>
+                  <strong>{key.replace(/_/g, " ")}:</strong> {String(value)}
+                </p>
+              ))}
           </div>
 
           {/* 🧠 Analysis */}
           <div className="analysis">
-            <h3>Status: {bore.analysis?.status}</h3>
 
-            <p>
-              <strong>Issues:</strong>{" "}
-              {bore.analysis?.issues?.length
-                ? bore.analysis.issues.join(", ")
-                : "None"}
-            </p>
+            {bore.analysis?.status && (
+              <h3>Status: {bore.analysis.status}</h3>
+            )}
 
-            <h4>Solutions</h4>
+            {bore.analysis?.issues?.length > 0 && (
+              <p>
+                <strong>Issues:</strong> {bore.analysis.issues.join(", ")}
+              </p>
+            )}
 
-            <p><strong>Low Cost:</strong></p>
-            <ul>
-              {(bore.analysis?.solutions?.low_cost || []).map((item, i) => (
-                <li key={i}>{item}</li>
-              ))}
-            </ul>
+            {(bore.analysis?.solutions?.low_cost?.length > 0 ||
+              bore.analysis?.solutions?.medium_cost?.length > 0 ||
+              bore.analysis?.solutions?.high_cost?.length > 0) && (
+              <>
+                <h4>Solutions</h4>
 
-            <p><strong>Medium Cost:</strong></p>
-            <ul>
-              {(bore.analysis?.solutions?.medium_cost || []).map((item, i) => (
-                <li key={i}>{item}</li>
-              ))}
-            </ul>
+                {bore.analysis?.solutions?.low_cost?.length > 0 && (
+                  <>
+                    <p><strong>Low Cost:</strong></p>
+                    <ul>
+                      {bore.analysis.solutions.low_cost.map((item, i) => (
+                        <li key={i}>{item}</li>
+                      ))}
+                    </ul>
+                  </>
+                )}
 
-            <p><strong>High Cost:</strong></p>
-            <ul>
-              {(bore.analysis?.solutions?.high_cost || []).map((item, i) => (
-                <li key={i}>{item}</li>
-              ))}
-            </ul>
+                {bore.analysis?.solutions?.medium_cost?.length > 0 && (
+                  <>
+                    <p><strong>Medium Cost:</strong></p>
+                    <ul>
+                      {bore.analysis.solutions.medium_cost.map((item, i) => (
+                        <li key={i}>{item}</li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+
+                {bore.analysis?.solutions?.high_cost?.length > 0 && (
+                  <>
+                    <p><strong>High Cost:</strong></p>
+                    <ul>
+                      {bore.analysis.solutions.high_cost.map((item, i) => (
+                        <li key={i}>{item}</li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+
+              </>
+            )}
           </div>
         </div>
       ))}
