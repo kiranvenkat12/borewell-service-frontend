@@ -74,12 +74,14 @@ const CustomerLogin = () => {
       password: formData.password
     });
 
-    // Check token path according to your backend
-    const token = res.data?.access_token || res.data?.token || res.data?.data?.access_token;
+    console.log("Login Response:", res.data); // 🔹 Debug
 
-    if (!token) return alert("No token received");
+    const token = res.data.access_token;
 
-    // Store token in context and localStorage
+    if (!token) {
+      return alert("No token received");
+    }
+
     login("customer", token);
     localStorage.setItem("customerToken", token);
 
