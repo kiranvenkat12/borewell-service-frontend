@@ -42,7 +42,7 @@ const BorewellAssignment = () => {
       const token = localStorage.getItem("adminToken");
 
       const res = await axios.post(
-        `http://localhost:8000/admin/borewell-info/${customerNum}`,
+        `https://borewell-service-production.up.railway.app/admin/borewell-info/{customer_num}`,
         formData,
         {
           headers: {
