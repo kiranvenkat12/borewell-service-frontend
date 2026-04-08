@@ -5,7 +5,6 @@ import ServicePage from "../pages/ServicePage";
 import ProtectedRoute from "../components/ProtectedRoute";
 // Admin
 import AdminLogin from "../pages/admin/AdminLogin";
-import AdminRegister from "../pages/admin/AdminRegister";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import NotFound from "../pages/NotFound";
 import RequestPage from "../pages/RequestPage"; 
@@ -18,7 +17,6 @@ const AppRoutes = () => {
       <Routes>
   {/* Admin */}
   <Route path="/admin/login" element={<AdminLogin />} />
-  <Route path="/admin/register" element={<AdminRegister />} />
   <Route
     path="/admin/dashboard"
     element={
@@ -43,6 +41,7 @@ const AppRoutes = () => {
   <Route path="/" element={<Home />} />
   <Route path="/services" element={<ServicePage />} />
   <Route path="/request" element={<RequestPage />} />
+  <Route path="/customer/auth" element={<CustomersLogin />} />
 
   {/* Catch all */}
   <Route path="*" element={<NotFound />} />

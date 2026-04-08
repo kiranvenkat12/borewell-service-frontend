@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API = "https://borewell-service-production.up.railway.app";
 
-// ✅ REGISTER ADMIN
+
 export const registerAdmin = async (data) => {
   try {
     const res = await axios.post(`${API}/admin/`, {
@@ -19,7 +19,7 @@ export const registerAdmin = async (data) => {
   }
 };
 
-// ✅ LOGIN ADMIN
+
 export const loginAdmin = async (data) => {
   try {
     const res = await axios.post(`${API}/admin/login`, {  // <-- changed here
