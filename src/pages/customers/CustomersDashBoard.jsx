@@ -13,10 +13,9 @@ const CustomerDashboard = () => {
   const phoneNumber = localStorage.getItem("customerPhone");
   const customerName = localStorage.getItem("customerName") || "Customer";
 
-  // 🔐 Redirect if not logged in
+  // 🔐 Auth Check
   useEffect(() => {
     if (!token || !phoneNumber) {
-      alert("Please login first");
       navigate("/customer/login");
     }
   }, [token, phoneNumber, navigate]);
@@ -34,10 +33,10 @@ const CustomerDashboard = () => {
           }
         );
 
-        setBorewellData(res.data);
+        setBorewellData(res.data || []);
       } catch (err) {
-        console.error(err);
-        alert("Failed to fetch dashboard data");
+        console.log("No data or API issue");
+        setBorewellData([]);
       } finally {
         setLoading(false);
       }
@@ -48,8 +47,11 @@ const CustomerDashboard = () => {
 
   // 🔓 Logout
   const handleLogout = () => {
+    const confirmLogout = window.confirm("Are you sure you want to logout?");
+    if (!confirmLogout) return;
+
     localStorage.clear();
-    navigate("/customer/login");
+    navigate("/");
   };
 
   if (loading) return <p className="loading">Loading...</p>;
@@ -70,41 +72,71 @@ const CustomerDashboard = () => {
         <h1>Customer Dashboard</h1>
         <button
           className="request-btn"
-          onClick={() => navigate("/customer/request")}
+          onClick={() => navigate("/services")}
         >
           + Raise Request
         </button>
       </div>
 
       {/* ❌ EMPTY STATE */}
-      {(!borewellData || borewellData.length === 0) && (
+      {borewellData.length === 0 && (
         <div className="empty-state">
-          <p>Our team is working on your bore details.</p>
-          <p>It will be updated soon.</p>
+          <h3>No Borewell Data Yet</h3>
+          <p>Our team is working on your borewell inspection.</p>
+          <p>You will see complete details here soon.</p>
         </div>
       )}
 
-      {/* ✅ DATA */}
+      {/* ✅ FULL DATA */}
       {borewellData.map((bore, index) => (
         <div className="card" key={index}>
           <h2>Borewell #{index + 1}</h2>
 
+          {/* 📊 Dynamic Data */}
           <div className="grid">
-            <p><strong>Depth:</strong> {bore.borewell_data.borewell_depth} m</p>
-            <p><strong>Casing:</strong> {bore.borewell_data.casing_depth} m</p>
-            <p><strong>Water Level:</strong> {bore.borewell_data.water_level} m</p>
-            <p><strong>pH:</strong> {bore.borewell_data.ph}</p>
-            <p><strong>TDS:</strong> {bore.borewell_data.tds}</p>
-            <p><strong>Iron:</strong> {bore.borewell_data.iron}</p>
+            {Object.entries(bore.borewell_data || {}).map(([key, value]) => (
+              <p key={key}>
+                <strong>{key}:</strong> {String(value)}
+              </p>
+            ))}
           </div>
 
+          {/* 🧠 Analysis */}
           <div className="analysis">
-            <h3>Status: {bore.analysis.status}</h3>
-            <p><strong>Issues:</strong> {bore.analysis.issues.join(", ") || "None"}</p>
+            <h3>Status: {bore.analysis?.status}</h3>
+
+            <p>
+              <strong>Issues:</strong>{" "}
+              {bore.analysis?.issues?.length
+                ? bore.analysis.issues.join(", ")
+                : "None"}
+            </p>
+
+            <h4>Solutions</h4>
+
+            <p><strong>Low Cost:</strong></p>
+            <ul>
+              {(bore.analysis?.solutions?.low_cost || []).map((item, i) => (
+                <li key={i}>{item}</li>
+              ))}
+            </ul>
+
+            <p><strong>Medium Cost:</strong></p>
+            <ul>
+              {(bore.analysis?.solutions?.medium_cost || []).map((item, i) => (
+                <li key={i}>{item}</li>
+              ))}
+            </ul>
+
+            <p><strong>High Cost:</strong></p>
+            <ul>
+              {(bore.analysis?.solutions?.high_cost || []).map((item, i) => (
+                <li key={i}>{item}</li>
+              ))}
+            </ul>
           </div>
         </div>
       ))}
-
     </div>
   );
 };

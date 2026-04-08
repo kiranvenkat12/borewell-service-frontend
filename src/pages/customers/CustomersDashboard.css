@@ -5,24 +5,31 @@
   font-family: "Segoe UI", sans-serif;
 }
 
-/* 🔝 Top Header */
+/* 🔝 HEADER */
 .top-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+  padding: 0.8rem 1rem;
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  color: white;
+  border-radius: 8px;
 }
 
 .top-header h3 {
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
+/* 🔘 Logout Small */
 .logout-btn {
-  background: #ff4d4f;
+  background: white;
+  color: #1e3c72;
   border: none;
-  padding: 0.5rem 1rem;
-  color: white;
-  border-radius: 5px;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 /* 📌 Main Header */
@@ -34,18 +41,20 @@
 }
 
 .main-header h1 {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
 }
 
 .request-btn {
   background: #007bff;
   color: white;
-  padding: 0.5rem 1rem;
+  padding: 0.45rem 0.8rem;
   border: none;
   border-radius: 5px;
+  font-size: 0.8rem;
+  cursor: pointer;
 }
 
-/* 📦 Cards */
+/* 📦 Card */
 .card {
   background: white;
   border-radius: 10px;
@@ -70,30 +79,34 @@
   border-radius: 6px;
 }
 
-/* ❌ Empty State */
+/* ❌ Empty */
 .empty-state {
   text-align: center;
   margin-top: 2rem;
-  color: #777;
+  color: #666;
 }
 
-/* 📱 Mobile Responsive */
-@media (max-width: 600px) {
-  .main-header h1 {
-    font-size: 1.2rem;
-  }
+/* ⏳ Loading */
+.loading {
+  text-align: center;
+  margin-top: 2rem;
+}
 
+/* 📱 Mobile */
+@media (max-width: 600px) {
   .grid {
     grid-template-columns: 1fr;
   }
 
+  .main-header h1 {
+    font-size: 1.2rem;
+  }
+
   .request-btn {
-    padding: 0.4rem 0.7rem;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
   }
 
   .logout-btn {
-    padding: 0.4rem 0.7rem;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
   }
 }
