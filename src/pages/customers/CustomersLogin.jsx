@@ -61,35 +61,46 @@ const CustomerLogin = () => {
       });
 
     } catch (err) {
-      console.error("Register Error:", err.response?.data);
-      alert(err.response?.data?.detail || err.message || "Registration failed");
+      console.error("Register Error:", err.response?.data || err.message);
+      alert(err.response?.data?.detail || "Registration failed");
     }
   };
 
- const handleLogin = async (e) => {
-  e.preventDefault();
-  try {
-   const res = await loginCustomer({ phoneNumber: formData.phone, password: formData.password });
-console.log("Login Response:", res.data);
-const token = res.access_token;
-localStorage.setItem("customerToken", response.data.access_token);
-localStorage.setItem("customerPhone", response.data.phoneNumber);
+  // ✅ LOGIN (FIXED)
+  const handleLogin = async (e) => {
+    e.preventDefault();
 
-    if (!token) {
-      return alert("No token received");
+    try {
+      const res = await loginCustomer({
+        phoneNumber: formData.phone,
+        password: formData.password,
+      });
+
+      console.log("Login Response:", res);
+
+      // ✅ FIX 1: correct data extraction
+      const token = res.access_token;
+
+      if (!token) {
+        return alert("No token received from server");
+      }
+
+      // ✅ FIX 2: store token + phone properly
+      localStorage.setItem("customerToken", token);
+      localStorage.setItem("customerPhone", formData.phone);
+
+      // ✅ FIX 3: update auth context
+      login("customer", token);
+
+      alert("Login Successful");
+      navigate("/customer/dashboard");
+
+    } catch (err) {
+      console.error("Login Error:", err.response?.data || err.message);
+      alert(err.response?.data?.detail || "Invalid phone number or password");
     }
+  };
 
-    login("customer", token);
-    localStorage.setItem("customerToken", token);
-
-    alert("Login Successful");
-    navigate("/customer/dashboard");
-
-  } catch (err) {
-    console.error("Login Error:", err.response?.data || err.message);
-    alert(err.response?.data?.detail || "Invalid phone number or password");
-  }
-};
   return (
     <>
       <AuthHeader title={isRegister ? "Customer Register" : "Customer Login"} />
@@ -159,7 +170,9 @@ localStorage.setItem("customerPhone", response.data.phoneNumber);
               />
             )}
 
-            <button type="submit">{isRegister ? "Register" : "Login"}</button>
+            <button type="submit">
+              {isRegister ? "Register" : "Login"}
+            </button>
           </form>
 
           <p onClick={() => setIsRegister(!isRegister)} className="toggle">
