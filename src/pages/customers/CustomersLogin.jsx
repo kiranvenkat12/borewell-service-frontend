@@ -28,13 +28,13 @@ const CustomerAuth = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    // 🔥 Phone validation
+    // Phone validation
     if (formData.phone !== formData.confirmPhone) {
       alert("Phone numbers do not match");
       return;
     }
 
-    // 🔥 Password validation
+    // Password validation
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match");
       return;
@@ -42,10 +42,12 @@ const CustomerAuth = () => {
 
     try {
       const payload = {
-        name: formData.name,
-        phone: formData.phone,
+        name: formData.name.trim(),
+        phoneNumber: formData.phone.trim(), // matches backend
         password: formData.password,
       };
+
+      console.log("Register Payload:", payload); // Debugging
 
       const res = await registerCustomer(payload);
 
@@ -62,6 +64,7 @@ const CustomerAuth = () => {
       });
 
     } catch (err) {
+      console.error("Register Error:", err.response?.data);
       alert(
         err.response?.data?.detail ||
         err.message ||
@@ -76,9 +79,11 @@ const CustomerAuth = () => {
 
     try {
       const payload = {
-        phone: formData.phone,
+        phoneNumber: formData.phone.trim(), // matches backend
         password: formData.password,
       };
+
+      console.log("Login Payload:", payload); // Debugging
 
       const res = await loginCustomer(payload);
 
@@ -92,6 +97,7 @@ const CustomerAuth = () => {
       navigate("/customer/dashboard");
 
     } catch (err) {
+      console.error("Login Error:", err.response?.data);
       alert(
         err.response?.data?.detail ||
         "Invalid phone number or password"
