@@ -16,7 +16,7 @@ import WorkerDashboard from "../pages/worker/WorkerDashboard";
 
 // Customer
 import CustomersLogin from "../pages/customers/CustomersLogin";
-import CustomerDashboard from "../pages/customer/CustomerDashboard";
+import CustomerDashboard from "../pages/customers/CustomerDashboard";
 
 // ProtectedRoute
 import ProtectedRoute from "../components/ProtectedRoute";
