@@ -28,13 +28,11 @@ const CustomerAuth = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    // Phone validation
     if (formData.phone !== formData.confirmPhone) {
       alert("Phone numbers do not match");
       return;
     }
 
-    // Password validation
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match");
       return;
@@ -43,18 +41,17 @@ const CustomerAuth = () => {
     try {
       const payload = {
         name: formData.name.trim(),
-        phoneNumber: formData.phone.trim(), // matches backend
+        phoneNumber: formData.phone.trim(),
         password: formData.password,
       };
 
-      console.log("Register Payload:", payload); // Debugging
+      console.log("Register Payload:", payload);
 
       const res = await registerCustomer(payload);
 
       alert(res.message || "Registered Successfully");
 
       setIsRegister(false);
-
       setFormData({
         name: "",
         phone: "",
@@ -65,11 +62,7 @@ const CustomerAuth = () => {
 
     } catch (err) {
       console.error("Register Error:", err.response?.data);
-      alert(
-        err.response?.data?.detail ||
-        err.message ||
-        "Registration failed"
-      );
+      alert(err.response?.data?.detail || err.message || "Registration failed");
     }
   };
 
@@ -79,29 +72,30 @@ const CustomerAuth = () => {
 
     try {
       const payload = {
-        phoneNumber: formData.phone.trim(), // matches backend
+        phoneNumber: formData.phone.trim(),
         password: formData.password,
       };
 
-      console.log("Login Payload:", payload); // Debugging
+      console.log("Login Payload:", payload);
 
       const res = await loginCustomer(payload);
 
+      // Get JWT token from backend
       const token = res.access_token || res.token;
       if (!token) throw new Error("No token received");
 
+      // Store token & phone number for future API calls
       localStorage.setItem("customerToken", token);
+      localStorage.setItem("customerPhone", formData.phone.trim());
 
-      alert("Login Success");
+      alert("Login Successful");
 
+      // Navigate to dashboard
       navigate("/customer/dashboard");
 
     } catch (err) {
       console.error("Login Error:", err.response?.data);
-      alert(
-        err.response?.data?.detail ||
-        "Invalid phone number or password"
-      );
+      alert(err.response?.data?.detail || "Invalid phone number or password");
     }
   };
 
@@ -114,7 +108,6 @@ const CustomerAuth = () => {
           <h2>{isRegister ? "Customer Register" : "Customer Login"}</h2>
 
           <form onSubmit={isRegister ? handleRegister : handleLogin}>
-
             {isRegister && (
               <>
                 <input
@@ -125,7 +118,6 @@ const CustomerAuth = () => {
                   onChange={handleChange}
                   required
                 />
-
                 <input
                   type="tel"
                   name="phone"
@@ -134,7 +126,6 @@ const CustomerAuth = () => {
                   onChange={handleChange}
                   required
                 />
-
                 <input
                   type="tel"
                   name="confirmPhone"
@@ -177,15 +168,10 @@ const CustomerAuth = () => {
               />
             )}
 
-            <button type="submit">
-              {isRegister ? "Register" : "Login"}
-            </button>
+            <button type="submit">{isRegister ? "Register" : "Login"}</button>
           </form>
 
-          <p
-            onClick={() => setIsRegister(!isRegister)}
-            className="toggle"
-          >
+          <p onClick={() => setIsRegister(!isRegister)} className="toggle">
             {isRegister
               ? "Already registered? Login here"
               : "New customer? Register first"}
@@ -198,4 +184,4 @@ const CustomerAuth = () => {
   );
 };
 
-export default CustomerAuth;
+export default CustomerLogin;

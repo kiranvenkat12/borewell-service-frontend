@@ -1,52 +1,71 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+// Pages
 import Home from "../pages/Home";
 import ServicePage from "../pages/ServicePage";
-import ProtectedRoute from "../components/ProtectedRoute";
+import RequestPage from "../pages/RequestPage";
+import NotFound from "../pages/NotFound";
+
 // Admin
 import AdminLogin from "../pages/admin/AdminLogin";
 import AdminDashboard from "../pages/admin/AdminDashboard";
-import NotFound from "../pages/NotFound";
-import RequestPage from "../pages/RequestPage"; 
+
 // Worker
 import WorkerLogin from "../pages/worker/WorkerLogin";
 import WorkerDashboard from "../pages/worker/WorkerDashboard";
+
+// Customer
 import CustomersLogin from "../pages/customers/CustomersLogin";
+import CustomerDashboard from "../pages/customer/CustomerDashboard";
+
+// ProtectedRoute
+import ProtectedRoute from "../components/ProtectedRoute";
+
 const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-  {/* Admin */}
-  <Route path="/admin/login" element={<AdminLogin />} />
-  <Route
-    path="/admin/dashboard"
-    element={
-      <ProtectedRoute role="admin">
-        <AdminDashboard />
-      </ProtectedRoute>
-    }
-  />
+        {/* Admin */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute role="admin">
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
 
-  {/* Worker */}
-  <Route path="/worker/login" element={<WorkerLogin />} />
-  <Route
-    path="/worker/dashboard"
-    element={
-      <ProtectedRoute role="worker">
-        <WorkerDashboard />
-      </ProtectedRoute>
-    }
-  />
+        {/* Worker */}
+        <Route path="/worker/login" element={<WorkerLogin />} />
+        <Route
+          path="/worker/dashboard"
+          element={
+            <ProtectedRoute role="worker">
+              <WorkerDashboard />
+            </ProtectedRoute>
+          }
+        />
 
-  {/* Other pages */}
-  <Route path="/" element={<Home />} />
-  <Route path="/services" element={<ServicePage />} />
-  <Route path="/request" element={<RequestPage />} />
-  <Route path="/customer/auth" element={<CustomersLogin />} />
+        {/* Customer */}
+        <Route path="/customer/auth" element={<CustomersLogin />} />
+        <Route
+          path="/customer/dashboard"
+          element={
+            <ProtectedRoute role="customer">
+              <CustomerDashboard />
+            </ProtectedRoute>
+          }
+        />
 
-  {/* Catch all */}
-  <Route path="*" element={<NotFound />} />
-</Routes>
+        {/* Other pages */}
+        <Route path="/" element={<Home />} />
+        <Route path="/services" element={<ServicePage />} />
+        <Route path="/request" element={<RequestPage />} />
+
+        {/* Catch all */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </BrowserRouter>
   );
 };
