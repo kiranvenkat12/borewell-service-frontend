@@ -1,39 +1,20 @@
-import { Navigate, useLocation } from "react-router-dom";
-
 const ProtectedRoute = ({ children, role }) => {
   let token;
-
-  // Determine token based on role
-  switch (role) {
-    case "admin":
-      token = localStorage.getItem("adminToken");
-      break;
-    case "worker":
-      token = localStorage.getItem("workerToken");
-      break;
-    case "customer":
-      token = localStorage.getItem("customerToken");
-      break;
-    default:
-      token = null;
-  }
+  if (role === "admin") token = localStorage.getItem("adminToken");
+  else if (role === "worker") token = localStorage.getItem("workerToken");
+  else if (role === "customer") token = localStorage.getItem("customerToken");
 
   const location = useLocation();
 
   if (!token) {
-    // Redirect to the correct login page based on role
-    const redirectPath =
-      role === "admin"
-        ? "/admin/login"
-        : role === "worker"
-        ? "/worker/login"
-        : "/customer/auth"; // customer login
-
-    return <Navigate to={redirectPath} state={{ from: location }} replace />;
+    return (
+      <Navigate
+        to={role === "customer" ? "/customer/auth" : `/${role}/login`}
+        state={{ from: location }}
+        replace
+      />
+    );
   }
 
-  // Token exists → allow access
   return children;
 };
-
-export default ProtectedRoute;

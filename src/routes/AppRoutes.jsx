@@ -48,15 +48,15 @@ const AppRoutes = () => {
         />
 
         {/* Customer */}
-        <Route path="/customer/auth" element={<CustomersLogin />} />
-        <Route
-          path="/customer/dashboard"
-          element={
-            <ProtectedRoute role="customer">
-              <CustomerDashboard />
-            </ProtectedRoute>
-          }
-        />
+<Route path="/customer/auth" element={<CustomersLogin />} />
+<Route
+  path="/customer/dashboard"
+  element={
+    <ProtectedRoute role="customer">
+      <CustomerDashboard />
+    </ProtectedRoute>
+  }
+/>
 
         {/* Other pages */}
         <Route path="/" element={<Home />} />
