@@ -53,25 +53,28 @@ const WorkerLogin = () => {
   };
 const handleLogin = async (e) => {
   e.preventDefault();
-  const res = await axios.post("https://borewell-service-production.up.railway.app/worker-registers/login", {
-    phonenumber: formData.phone,
-    password: formData.password,
-  });
 
-  const token = res.data.access_token;
-  if (!token) return alert("No token received");
+  try {
+    const res = await axios.post(
+      "https://borewell-service-production.up.railway.app/worker-registers/login",
+      {
+        phonenumber: formData.phone,
+        password: formData.password,
+      }
+    );
 
-  login("worker", token);
-  alert("Login Successful");
-  navigate("/worker/dashboard");
-};
+    const token = res.data.access_token;
+    if (!token) return alert("No token received");
 
-    // ✅ FIXED HERE
+    // Store token and user info
     localStorage.setItem("workerId", res.data.id);
-    localStorage.setItem("workerToken", res.data.access_token);
+    localStorage.setItem("workerToken", token);
     localStorage.setItem("workerName", res.data.name);
 
-    console.log("workerId:", localStorage.getItem("workerId"));
+    // Optional: call context login
+    login("worker", token);
+
+    alert("Login Successful");
 
     navigate("/worker/dashboard");
   } catch (err) {

@@ -4,10 +4,9 @@ import { registerCustomer, loginCustomer } from "../../services/customerService"
 import AuthHeader from "../../components/AuthHeader";
 import Footer from "../../components/Footer";
 import "./CustomersLogin.css";
-import {useAuth} from "../../services/AuthContext";
+import { useAuth } from "../../services/AuthContext";
 
-
-const CustomerAuth = () => {
+const CustomerLogin = () => {
   const [isRegister, setIsRegister] = useState(true);
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -48,8 +47,6 @@ const CustomerAuth = () => {
         password: formData.password,
       };
 
-      console.log("Register Payload:", payload);
-
       const res = await registerCustomer(payload);
 
       alert(res.message || "Registered Successfully");
@@ -69,17 +66,23 @@ const CustomerAuth = () => {
     }
   };
 
+  // ✅ LOGIN
   const handleLogin = async (e) => {
-  e.preventDefault();
-  const res = await loginCustomer({ phoneNumber: formData.phone, password: formData.password });
-  const token = res.data?.access_token || res.data?.token;
+    e.preventDefault();
+    try {
+      const res = await loginCustomer({ phoneNumber: formData.phone, password: formData.password });
+      const token = res.data?.access_token || res.data?.token;
 
-  if (!token) return alert("No token received");
+      if (!token) return alert("No token received");
 
-  login("customer", token);
-  alert("Login Successful");
-  navigate("/customer/dashboard");
-};
+      login("customer", token);
+      alert("Login Successful");
+      navigate("/customer/dashboard");
+    } catch (err) {
+      console.error("Login Error:", err.response?.data || err.message);
+      alert(err.response?.data?.detail || "Invalid phone number or password");
+    }
+  };
 
   return (
     <>
