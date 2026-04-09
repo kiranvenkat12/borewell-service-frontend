@@ -20,24 +20,25 @@ const CustomerDashboard = () => {
     }
   }, [token, phoneNumber]);
 
-  // 📡 Fetch Data
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(
-          `https://borewell-service-production.up.railway.app/admin/borewell-info/${phoneNumber}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        setBorewellData(res.data || []);
-      } catch {
-        setBorewellData([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // 🔄 Fetch Data
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get(
+        `https://borewell-service-production.up.railway.app/admin/borewell-info/${phoneNumber}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setBorewellData(res.data || []);
+    } catch {
+      setBorewellData([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     if (phoneNumber) fetchData();
   }, [token, phoneNumber]);
 
@@ -51,7 +52,6 @@ const CustomerDashboard = () => {
   // 📄 PDF DOWNLOAD
   const downloadPDF = (bore) => {
     const doc = new jsPDF();
-
     let y = 10;
 
     doc.setFontSize(16);
@@ -60,7 +60,6 @@ const CustomerDashboard = () => {
 
     doc.setFontSize(12);
 
-    // Borewell Data
     Object.entries(bore.borewell_data || {}).forEach(([key, value]) => {
       if (value !== null && value !== undefined && value !== "") {
         doc.text(`${key}: ${value}`, 10, y);
@@ -70,7 +69,6 @@ const CustomerDashboard = () => {
 
     y += 5;
 
-    // Analysis
     if (bore.analysis?.status) {
       doc.text(`Status: ${bore.analysis.status}`, 10, y);
       y += 7;
@@ -99,8 +97,6 @@ const CustomerDashboard = () => {
     doc.save("borewell-report.pdf");
   };
 
-  if (loading) return <p className="loading">Loading...</p>;
-
   return (
     <div className="dashboard">
 
@@ -123,62 +119,69 @@ const CustomerDashboard = () => {
         </button>
       </div>
 
-      {/* ❌ EMPTY STATE */}
-      {borewellData.length === 0 && (
+      {/* 📦 DATA SECTION */}
+      {loading ? (
+        <div className="data-loader">
+          <div className="spinner"></div>
+          <p>Fetching your borewell data...</p>
+        </div>
+      ) : borewellData.length === 0 ? (
         <div className="empty-state">
           <h3>No Borewell Data Yet</h3>
           <p>Our team is working on your borewell inspection.</p>
           <p>You will see complete details here soon.</p>
         </div>
-      )}
+      ) : (
+        borewellData.map((bore, index) => (
+          <div className="card" key={index}>
+            <h2>Borewell #{index + 1}</h2>
 
-      {/* ✅ DATA */}
-      {borewellData.map((bore, index) => (
-        <div className="card" key={index}>
-          <h2>Borewell #{index + 1}</h2>
+            <button
+              className="download-btn"
+              onClick={() => downloadPDF(bore)}
+            >
+              Download PDF
+            </button>
 
-          {/* 📄 DOWNLOAD BUTTON */}
-          <button
-            className="download-btn"
-            onClick={() => downloadPDF(bore)}
-          >
-            Download PDF
-          </button>
+            <div className="grid">
+              {Object.entries(bore.borewell_data || {})
+                .filter(([_, v]) => v !== null && v !== "")
+                .map(([k, v]) => (
+                  <p key={k}>
+                    <strong>{k.replace(/_/g, " ")}:</strong> {String(v)}
+                  </p>
+                ))}
+            </div>
 
-          {/* 📊 DATA */}
-          <div className="grid">
-            {Object.entries(bore.borewell_data || {})
-              .filter(([_, v]) => v !== null && v !== "")
-              .map(([k, v]) => (
-                <p key={k}>
-                  <strong>{k.replace(/_/g, " ")}:</strong> {String(v)}
+            <div className="analysis">
+              {bore.analysis?.status && <h3>Status: {bore.analysis.status}</h3>}
+
+              {bore.analysis?.issues?.length > 0 && (
+                <p>
+                  <strong>Issues:</strong>{" "}
+                  {bore.analysis.issues.join(", ")}
                 </p>
-              ))}
+              )}
+
+              {["low_cost", "medium_cost", "high_cost"].map(
+                (type) =>
+                  bore.analysis?.solutions?.[type]?.length > 0 && (
+                    <div key={type}>
+                      <p>
+                        <strong>{type.replace("_", " ")}:</strong>
+                      </p>
+                      <ul>
+                        {bore.analysis.solutions[type].map((i, idx) => (
+                          <li key={idx}>{i}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )
+              )}
+            </div>
           </div>
-
-          {/* 🧠 ANALYSIS */}
-          <div className="analysis">
-            {bore.analysis?.status && <h3>Status: {bore.analysis.status}</h3>}
-
-            {bore.analysis?.issues?.length > 0 && (
-              <p><strong>Issues:</strong> {bore.analysis.issues.join(", ")}</p>
-            )}
-
-            {["low_cost", "medium_cost", "high_cost"].map((type) => (
-              bore.analysis?.solutions?.[type]?.length > 0 && (
-                <div key={type}>
-                  <p><strong>{type.replace("_", " ")}:</strong></p>
-                  <ul>
-                    {bore.analysis.solutions[type].map((i, idx) => (
-                      <li key={idx}>{i}</li>
-                    ))}
-                  </ul>
-                </div>
-              )
-            ))}
-          </div>
-        </div>
-      ))}
+        ))
+      )}
 
       {/* 🔥 MODAL */}
       {showRequestModal && (
@@ -186,7 +189,10 @@ const CustomerDashboard = () => {
           <div className="modal-content">
             <RequestCard
               isModal={true}
-              onClose={() => setShowRequestModal(false)}
+              onClose={() => {
+                setShowRequestModal(false);
+                fetchData(); // 🔥 refresh after submit
+              }}
             />
           </div>
         </div>

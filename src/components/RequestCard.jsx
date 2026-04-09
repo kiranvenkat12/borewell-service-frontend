@@ -68,10 +68,16 @@ const RequestCard = () => {
         description: "",
       });
 
-      setTimeout(() => {
-        setShowSuccessPopup(false);
-        navigate("/services");
-      }, 5000);
+     setTimeout(() => {
+  setShowSuccessPopup(false);
+
+  if (isModal) {
+    onClose && onClose(); // ✅ stay in dashboard
+  } else {
+    navigate("/services"); // ✅ homepage flow
+  }
+
+}, 3000);
 
     } catch (err) {
       console.error(err);
