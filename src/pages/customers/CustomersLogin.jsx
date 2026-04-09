@@ -8,6 +8,7 @@ import { useAuth } from "../../services/AuthContext";
 
 const CustomerLogin = () => {
   const [isRegister, setIsRegister] = useState(true);
+  const [loading, setLoading] = useState(false); // ✅ ADD THIS
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -39,6 +40,8 @@ const CustomerLogin = () => {
     }
 
     try {
+      setLoading(true); // ✅ START LOADING
+
       const payload = {
         name: formData.name.trim(),
         phoneNumber: formData.phone.trim(),
@@ -50,22 +53,23 @@ const CustomerLogin = () => {
         payload
       );
 
-      console.log("Register Response:", response.data);
-
       alert(response.data.message || "Registered Successfully");
 
+      // ✅ AUTO SWITCH TO LOGIN + PREFILL
       setIsRegister(false);
       setFormData({
         name: "",
-        phone: "",
+        phone: formData.phone, // keep phone
         confirmPhone: "",
-        password: "",
+        password: formData.password, // keep password
         confirmPassword: "",
       });
 
     } catch (err) {
       console.error("Register Error:", err);
       alert(err.response?.data?.detail || "Registration failed");
+    } finally {
+      setLoading(false); // ✅ STOP LOADING
     }
   };
 
@@ -74,6 +78,8 @@ const CustomerLogin = () => {
     e.preventDefault();
 
     try {
+      setLoading(true); // ✅ START LOADING
+
       const response = await axios.post(
         "https://borewell-service-production.up.railway.app/customer-registrations/login",
         {
@@ -82,15 +88,12 @@ const CustomerLogin = () => {
         }
       );
 
-      console.log("Login Response:", response.data);
-
       const token = response.data.access_token;
 
       if (!token) {
         return alert("No token received");
       }
 
-      // ✅ store
       localStorage.setItem("customerToken", token);
       localStorage.setItem("customerPhone", formData.phone.trim());
       localStorage.setItem("customerName", response.data.customer_name);
@@ -103,6 +106,8 @@ const CustomerLogin = () => {
     } catch (err) {
       console.error("Login Error:", err);
       alert(err.response?.data?.detail || "Invalid phone number or password");
+    } finally {
+      setLoading(false); // ✅ STOP LOADING
     }
   };
 
@@ -175,8 +180,15 @@ const CustomerLogin = () => {
               />
             )}
 
-            <button type="submit">
-              {isRegister ? "Register" : "Login"}
+            {/* ✅ BUTTON WITH LOADING */}
+            <button type="submit" disabled={loading}>
+              {loading
+                ? isRegister
+                  ? "Registering..."
+                  : "Logging in..."
+                : isRegister
+                ? "Register"
+                : "Login"}
             </button>
           </form>
 
@@ -187,6 +199,14 @@ const CustomerLogin = () => {
           </p>
         </div>
       </div>
+
+      {/* 🔥 FULL SCREEN LOADER */}
+      {loading && (
+        <div className="loader-overlay">
+          <div className="spinner"></div>
+          <p>{isRegister ? "Creating account..." : "Logging you in..."}</p>
+        </div>
+      )}
 
       <Footer />
     </>
