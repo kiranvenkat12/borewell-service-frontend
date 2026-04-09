@@ -4,7 +4,7 @@ import Confetti from "react-confetti";
 import "./RequestCard.css";
 import { createRequest } from "../services/requestService";
 
-const RequestCard = () => {
+const RequestCard = ({ isModal = false, onClose }) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -57,6 +57,7 @@ const RequestCard = () => {
 
       setShowSuccessPopup(true);
 
+      // reset form
       setFormData({
         name: "",
         phone_primary: "",
@@ -68,16 +69,16 @@ const RequestCard = () => {
         description: "",
       });
 
-     setTimeout(() => {
-  setShowSuccessPopup(false);
+      // ✅ smart redirect logic
+      setTimeout(() => {
+        setShowSuccessPopup(false);
 
-  if (isModal) {
-    onClose && onClose(); // ✅ stay in dashboard
-  } else {
-    navigate("/services"); // ✅ homepage flow
-  }
-
-}, 3000);
+        if (isModal) {
+          onClose && onClose(); // stay inside dashboard
+        } else {
+          navigate("/services"); // homepage flow
+        }
+      }, 3000);
 
     } catch (err) {
       console.error(err);
@@ -91,7 +92,17 @@ const RequestCard = () => {
     <div className="request-wrapper">
       <div className="request-card">
 
-        <div className="back-btn" onClick={() => navigate("/")}>
+        {/* 🔙 BACK BUTTON FIXED */}
+        <div
+          className="back-btn"
+          onClick={() => {
+            if (isModal) {
+              onClose && onClose(); // ✅ close modal
+            } else {
+              navigate("/"); // ✅ go home
+            }
+          }}
+        >
           Back
         </div>
 
@@ -99,7 +110,7 @@ const RequestCard = () => {
         <p className="subtitle">Fast • Trusted • Doorstep Service</p>
 
         <form onSubmit={handleSubmit} className="form">
-          
+
           <div className="form-group">
             <label>👤 Name *</label>
             <input
@@ -144,7 +155,9 @@ const RequestCard = () => {
                 <button
                   type="button"
                   key={item.value}
-                  className={formData.service_type === item.value ? "active" : ""}
+                  className={
+                    formData.service_type === item.value ? "active" : ""
+                  }
                   onClick={() => handleServiceSelect(item.value)}
                 >
                   {item.label}
@@ -203,7 +216,7 @@ const RequestCard = () => {
         </form>
       </div>
 
-      {/* 🔥 FULL SCREEN LOADER */}
+      {/* 🔥 LOADER */}
       {loading && (
         <div className="loader-overlay">
           <div className="spinner"></div>
@@ -211,7 +224,7 @@ const RequestCard = () => {
         </div>
       )}
 
-      {/* ✅ Success Popup */}
+      {/* ✅ SUCCESS */}
       {showSuccessPopup && (
         <div className="success-popup">
           <Confetti width={window.innerWidth} height={window.innerHeight} />
