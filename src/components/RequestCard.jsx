@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Confetti from "react-confetti"; // ✅ install via: npm install react-confetti
+import Confetti from "react-confetti";
 import "./RequestCard.css";
 import { createRequest } from "../services/requestService";
 
@@ -52,12 +52,11 @@ const RequestCard = () => {
 
     try {
       setLoading(true);
+
       await createRequest(formData);
 
-      // ✅ Show success popup with confetti
       setShowSuccessPopup(true);
 
-      // Reset form
       setFormData({
         name: "",
         phone_primary: "",
@@ -69,7 +68,6 @@ const RequestCard = () => {
         description: "",
       });
 
-      // ✅ Auto navigate after 3 seconds
       setTimeout(() => {
         setShowSuccessPopup(false);
         navigate("/services");
@@ -95,7 +93,7 @@ const RequestCard = () => {
         <p className="subtitle">Fast • Trusted • Doorstep Service</p>
 
         <form onSubmit={handleSubmit} className="form">
-          {/* Name */}
+          
           <div className="form-group">
             <label>👤 Name *</label>
             <input
@@ -106,7 +104,6 @@ const RequestCard = () => {
             />
           </div>
 
-          {/* Primary Phone */}
           <div className="form-group">
             <label>📞 Mobile Phone *</label>
             <input
@@ -117,7 +114,6 @@ const RequestCard = () => {
             />
           </div>
 
-          {/* Secondary Phone */}
           <div className="form-group">
             <label>📞 Second Mobile Phone(optional)</label>
             <input
@@ -128,7 +124,6 @@ const RequestCard = () => {
             />
           </div>
 
-          {/* Service Type */}
           <div className="form-group">
             <label>⚙️ Service Type *</label>
             <div className="service-options">
@@ -152,7 +147,6 @@ const RequestCard = () => {
             </div>
           </div>
 
-          {/* Borewell Depth */}
           {(formData.service_type === "motor_install" ||
             formData.service_type === "repair" ||
             formData.service_type === "motor_remove" ||
@@ -168,7 +162,6 @@ const RequestCard = () => {
             </div>
           )}
 
-          {/* Address */}
           <div className="form-group">
             <label>📍 Address *</label>
             <input
@@ -179,7 +172,6 @@ const RequestCard = () => {
             />
           </div>
 
-          {/* Pincode */}
           <div className="form-group">
             <label>📮 Pincode *</label>
             <input
@@ -190,7 +182,6 @@ const RequestCard = () => {
             />
           </div>
 
-          {/* Description */}
           <div className="form-group">
             <label>📝 Description</label>
             <textarea
@@ -205,6 +196,14 @@ const RequestCard = () => {
           </button>
         </form>
       </div>
+
+      {/* 🔥 FULL SCREEN LOADER */}
+      {loading && (
+        <div className="loader-overlay">
+          <div className="spinner"></div>
+          <p>Submitting your request...</p>
+        </div>
+      )}
 
       {/* ✅ Success Popup */}
       {showSuccessPopup && (
