@@ -1,0 +1,78 @@
+.hyderabad-section {
+  padding: 60px 20px;
+  background: linear-gradient(to right, #f5f7fa, #eef2f7);
+  display: flex;
+  justify-content: center;
+}
+
+.hyderabad-container {
+  max-width: 1000px;
+  width: 100%;
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: 0.3s ease;
+}
+
+.hyderabad-container:hover {
+  transform: translateY(-5px);
+}
+
+/* Heading */
+.hyderabad-container h1 {
+  font-size: 34px;
+  color: #0b1f3a;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+/* Sub headings */
+.hyderabad-container h2 {
+  font-size: 22px;
+  color: #1a3c5e;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+/* Paragraph */
+.hyderabad-container p {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.8;
+  margin-bottom: 15px;
+}
+
+/* List */
+.hyderabad-container ul {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+.hyderabad-container li {
+  font-size: 15px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+/* Bullet color */
+.hyderabad-container li::marker {
+  color: #0077ff;
+  font-size: 18px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .hyderabad-container {
+    padding: 25px;
+  }
+
+  .hyderabad-container h1 {
+    font-size: 26px;
+  }
+
+  .hyderabad-container h2 {
+    font-size: 18px;
+  }
+}
