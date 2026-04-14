@@ -12,7 +12,8 @@ const Navbar = () => {
     { label: "Admin Login", path: "/admin/login" },
     { label: "Worker Login", path: "/worker/login" },
     { label: "Services", path: "/services" },
-    { label: "Customer Portal", path: "/customer/auth" }
+    { label: "Customer Portal", path: "/customer/auth" },
+    { label: "Bore Inception", path: "https://borewell-lens-notes.lovable.app/" }
   ];
 
   // 🔥 SCROLL DETECTION
