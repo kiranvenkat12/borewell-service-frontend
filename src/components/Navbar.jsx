@@ -5,7 +5,7 @@ import "./Navbar.css";
 const Navbar = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false); // 🔥 NEW
+  const [scrolled, setScrolled] = useState(false);
 
   const menuItems = [
     { label: "Home", path: "/" },
@@ -16,16 +16,22 @@ const Navbar = () => {
     { label: "Bore Inception", path: "https://borewell-lens-notes.lovable.app/" }
   ];
 
-  // 🔥 SCROLL DETECTION
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 0); // trigger immediately
+      setScrolled(window.scrollY > 0);
     };
 
     window.addEventListener("scroll", handleScroll);
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleNavigation = (path) => {
+    if (path.startsWith("http")) {
+      window.location.href = path;
+    } else {
+      navigate(path);
+    }
+  };
 
   return (
     <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
@@ -37,7 +43,7 @@ const Navbar = () => {
         {/* Desktop Menu */}
         <ul className="navbar-menu">
           {menuItems.map((item) => (
-            <li key={item.label} onClick={() => navigate(item.path)}>
+            <li key={item.label} onClick={() => handleNavigation(item.path)}>
               {item.label}
             </li>
           ))}
@@ -60,7 +66,7 @@ const Navbar = () => {
           <li
             key={item.label}
             onClick={() => {
-              navigate(item.path);
+              handleNavigation(item.path);
               setMenuOpen(false);
             }}
           >
