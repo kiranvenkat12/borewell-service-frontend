@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const Banner = () => {
   const navigate = useNavigate();
+
   return (
     <section className="banner">
       <div className="banner-overlay">
@@ -20,9 +21,27 @@ const Banner = () => {
             Easily submit your borewell issues and get timely support with proper
             tracking and updates—all in one place.
           </p>
-<button className="banner-button" onClick={() => navigate("/request")}>
-  Raise Request
-</button>
+
+          {/* 📞 CONTACT (clean + highlighted) */}
+          <p className="banner-contact">
+            Call Now: <span className="contact-number">7702486592</span>
+          </p>
+
+          <div className="banner-buttons">
+            <button
+              className="banner-button"
+              onClick={() => navigate("/request")}
+            >
+              Raise Request
+            </button>
+
+            <button
+              className="banner-button"
+              onClick={() => navigate("/borewell-tool")}
+            >
+              Get Motor Suggestion
+            </button>
+          </div>
         </div>
       </div>
     </section>

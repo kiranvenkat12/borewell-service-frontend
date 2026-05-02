@@ -1,13 +1,13 @@
 .banner {
   height: 100vh;
   width: 100%;
-  background-image: url("/public/homepage.png");
+  background-image: url("/homepage.png"); /* fixed */
   background-size: cover;
   background-position: right center;
   position: relative;
 }
 
-/* THIS creates the fade effect */
+/* Overlay */
 .banner-overlay {
   height: 100%;
   width: 100%;
@@ -15,7 +15,6 @@
   align-items: center;
   padding: 80px;
 
-  /* Gradient fades LEFT → RIGHT */
   background: linear-gradient(
     to right,
     rgba(255, 255, 255, 0.95) 35%,
@@ -28,10 +27,10 @@
 /* LEFT CONTENT */
 .banner-left {
   max-width: 520px;
-    margin-top: 120px;
-
+  margin-top: 120px;
 }
 
+/* TITLE */
 .banner-title {
   font-size: 42px;
   font-weight: 700;
@@ -43,13 +42,39 @@
   color: #1abc9c;
 }
 
+/* DESCRIPTION */
 .banner-description {
   margin: 20px 0;
   font-size: 16px;
-  color: #000000;
+  color: #333;
   line-height: 1.6;
 }
 
+/* FEATURE TEXT */
+.banner-feature {
+  margin-top: 15px;
+  font-size: 15px;
+  color: #444;
+  font-weight: 500;
+}
+
+/* CONTACT */
+.banner-contact {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #222;
+  font-weight: 600;
+}
+
+/* BUTTON GROUP */
+.banner-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+  flex-wrap: wrap;
+}
+
+/* BUTTON (same style for both) */
 .banner-button {
   background-color: #1abc9c;
   color: #fff;
@@ -65,27 +90,45 @@
   background-color: #159a80;
 }
 
+/* -------- MOBILE -------- */
 @media (max-width: 900px) {
   .banner-overlay {
-    
-
-    /* Softer gradient instead of full white */
     background: linear-gradient(
       to bottom,
-      rgba(255, 255, 255, 0.85) 20%,
-      rgba(255, 255, 255, 0.6) 50%,
-      rgba(255, 255, 255, 0.2) 80%,
+      rgba(255, 255, 255, 0.9) 20%,
+      rgba(255, 255, 255, 0.7) 50%,
+      rgba(255, 255, 255, 0.3) 80%,
       rgba(255, 255, 255, 0) 100%
     );
 
-    justify-content: flex-start;
-    padding: 20px 20px 40px;
+    justify-content: center;
+    padding: 20px;
     text-align: center;
-    
+  }
+
+  .banner-left {
+    margin-top: 0;
   }
 
   .banner-title {
-    font-size: 32px;
-    margin-top: -280px;
+    font-size: 30px;
   }
+
+  .banner-buttons {
+    justify-content: center;
+  }
+}
+
+.banner-contact {
+  margin-top: 15px;
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+}
+
+.contact-number {
+  color: #000000;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 1px;
 }

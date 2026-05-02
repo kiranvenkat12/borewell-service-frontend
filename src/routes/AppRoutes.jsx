@@ -5,6 +5,7 @@ import Home from "../pages/Home";
 import ServicePage from "../pages/ServicePage";
 import RequestPage from "../pages/RequestPage";
 import NotFound from "../pages/NotFound";
+import BorewellTool from "../components/BorewellTool";
 
 // Admin
 import AdminLogin from "../pages/admin/AdminLogin";
@@ -34,6 +35,7 @@ const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
+        <Route path="/borewell-tool" element={<BorewellTool />} />
 
         {/* Worker */}
         <Route path="/worker/login" element={<WorkerLogin />} />
