@@ -8,7 +8,9 @@ import { useAuth } from "../../services/AuthContext";
 
 const CustomerLogin = () => {
   const [isRegister, setIsRegister] = useState(true);
-  const [loading, setLoading] = useState(false); // ✅ ADD THIS
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -21,13 +23,9 @@ const CustomerLogin = () => {
   });
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // ✅ REGISTER
   const handleRegister = async (e) => {
     e.preventDefault();
 
@@ -40,45 +38,39 @@ const CustomerLogin = () => {
     }
 
     try {
-      setLoading(true); // ✅ START LOADING
-
-      const payload = {
-        name: formData.name.trim(),
-        phoneNumber: formData.phone.trim(),
-        password: formData.password,
-      };
+      setLoading(true);
 
       const response = await axios.post(
         "https://borewell-service-production.up.railway.app/customer-registrations/register",
-        payload
+        {
+          name: formData.name.trim(),
+          phoneNumber: formData.phone.trim(),
+          password: formData.password,
+        }
       );
 
       alert(response.data.message || "Registered Successfully");
 
-      // ✅ AUTO SWITCH TO LOGIN + PREFILL
       setIsRegister(false);
       setFormData({
         name: "",
-        phone: formData.phone, // keep phone
+        phone: formData.phone,
         confirmPhone: "",
-        password: formData.password, // keep password
+        password: formData.password,
         confirmPassword: "",
       });
-
     } catch (err) {
-      console.error("Register Error:", err);
       alert(err.response?.data?.detail || "Registration failed");
     } finally {
-      setLoading(false); // ✅ STOP LOADING
+      setLoading(false);
     }
   };
 
-  // ✅ LOGIN
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      setLoading(true); // ✅ START LOADING
+      setLoading(true);
 
       const response = await axios.post(
         "https://borewell-service-production.up.railway.app/customer-registrations/login",
@@ -90,10 +82,6 @@ const CustomerLogin = () => {
 
       const token = response.data.access_token;
 
-      if (!token) {
-        return alert("No token received");
-      }
-
       localStorage.setItem("customerToken", token);
       localStorage.setItem("customerPhone", formData.phone.trim());
       localStorage.setItem("customerName", response.data.customer_name);
@@ -102,12 +90,10 @@ const CustomerLogin = () => {
 
       alert("Login Successful");
       navigate("/customer/dashboard");
-
     } catch (err) {
-      console.error("Login Error:", err);
-      alert(err.response?.data?.detail || "Invalid phone number or password");
+      alert(err.response?.data?.detail || "Invalid credentials");
     } finally {
-      setLoading(false); // ✅ STOP LOADING
+      setLoading(false);
     }
   };
 
@@ -117,7 +103,7 @@ const CustomerLogin = () => {
 
       <div className="auth-container">
         <div className="auth-card">
-          <h2>{isRegister ? "Customer Register" : "Customer Login"}</h2>
+          <h2>{isRegister ? "Create Account" : "Welcome Back"}</h2>
 
           <form onSubmit={isRegister ? handleRegister : handleLogin}>
             {isRegister && (
@@ -125,11 +111,12 @@ const CustomerLogin = () => {
                 <input
                   type="text"
                   name="name"
-                  placeholder="Name"
+                  placeholder="Full Name"
                   value={formData.name}
                   onChange={handleChange}
                   required
                 />
+
                 <input
                   type="tel"
                   name="phone"
@@ -138,6 +125,7 @@ const CustomerLogin = () => {
                   onChange={handleChange}
                   required
                 />
+
                 <input
                   type="tel"
                   name="confirmPhone"
@@ -160,18 +148,27 @@ const CustomerLogin = () => {
               />
             )}
 
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
+            {/* PASSWORD */}
+            <div className="password-field">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+              <span
+                className="toggle-eye"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? "🙈" : "👁️"}
+              </span>
+            </div>
 
             {isRegister && (
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="confirmPassword"
                 placeholder="Confirm Password"
                 value={formData.confirmPassword}
@@ -180,11 +177,10 @@ const CustomerLogin = () => {
               />
             )}
 
-            {/* ✅ BUTTON WITH LOADING */}
             <button type="submit" disabled={loading}>
               {loading
                 ? isRegister
-                  ? "Registering..."
+                  ? "Creating..."
                   : "Logging in..."
                 : isRegister
                 ? "Register"
@@ -194,17 +190,15 @@ const CustomerLogin = () => {
 
           <p onClick={() => setIsRegister(!isRegister)} className="toggle">
             {isRegister
-              ? "Already registered? Login here"
-              : "New customer? Register first"}
+              ? "Already have an account? Login"
+              : "New user? Create account"}
           </p>
         </div>
       </div>
 
-      {/* 🔥 FULL SCREEN LOADER */}
       {loading && (
         <div className="loader-overlay">
           <div className="spinner"></div>
-          <p>{isRegister ? "Creating account..." : "Logging you in..."}</p>
         </div>
       )}
 
