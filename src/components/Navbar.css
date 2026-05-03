@@ -1,4 +1,8 @@
-/* Reset */
+/* RESET */
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
@@ -10,24 +14,23 @@ ul {
   padding: 0;
 }
 
-/* ================= NAVBAR ================= */
+/* NAVBAR */
 .navbar {
-    position: fixed;
+  position: fixed;
   top: 0;
   width: 100%;
   z-index: 100;
-  transition: all 0.3s ease;
+  transition: 0.3s;
   background: transparent;
 }
 
-
 .navbar.scrolled {
-  background: rgba(255, 255, 255, 0.95); /* smooth solid */
-  backdrop-filter: blur(8px); /* modern glass effect */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
 
-/* Container */
+/* CONTAINER */
 .navbar-container {
   display: flex;
   justify-content: space-between;
@@ -37,7 +40,7 @@ ul {
   margin: auto;
 }
 
-/* Logo */
+/* LOGO */
 .navbar-logo {
   font-size: 1.6rem;
   font-weight: bold;
@@ -45,7 +48,7 @@ ul {
   cursor: pointer;
 }
 
-/* Desktop Menu */
+/* DESKTOP MENU */
 .navbar-menu {
   display: flex;
   align-items: center;
@@ -57,99 +60,104 @@ ul {
   font-size: 15px;
   color: #333;
   padding: 6px 10px;
-  transition: all 0.3s ease;
-  border-radius: 4px;
 }
 
-/* Hover effect */
 .navbar-menu li:hover {
   color: #1abc9c;
 }
 
-/* CTA Button */
+/* CUSTOMER BUTTON */
 .navbar-btn {
   background: #1abc9c;
   color: #fff !important;
   padding: 8px 18px;
   border-radius: 6px;
-  margin-left: 15px;
-  transition: 0.3s ease;
 }
 
-.navbar-btn:hover {
-  background: #159a80;
+/* DROPDOWN */
+.staff-dropdown {
+  position: relative;
 }
 
-/* ================= HAMBURGER ================= */
+.dropdown-menu {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  background: #fff;
+  min-width: 160px;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+.dropdown-menu li {
+  padding: 10px 15px;
+}
+
+.dropdown-menu li:hover {
+  background: #f5f5f5;
+  color: #1abc9c;
+}
+
+/* HAMBURGER */
 .hamburger {
   display: none;
   flex-direction: column;
   cursor: pointer;
-  gap: 5px;
 }
 
 .hamburger span {
   height: 3px;
   width: 25px;
   background: #333;
-  border-radius: 2px;
-  transition: 0.3s;
+  margin: 4px 0;
 }
 
-/* Animation */
-.hamburger.open span:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
-}
-
-.hamburger.open span:nth-child(2) {
-  opacity: 0;
-}
-
-.hamburger.open span:nth-child(3) {
-  transform: rotate(-45deg) translate(5px, -5px);
-}
-
-/* ================= MOBILE MENU ================= */
+/* MOBILE MENU */
 .mobile-menu {
   display: none;
   flex-direction: column;
-  width: 100%;
-  background: #ffffff;
-  border-top: 1px solid #eee;
+  background: #fff;
 }
 
-.mobile-menu li {
-  padding: 14px 20px;
-  cursor: pointer;
-  color: #333;
-  transition: 0.3s;
-}
-
-/* Hover */
-.mobile-menu li:hover {
-  color: #1abc9c;
-  background: #f7f7f7;
-}
-
-/* Active mobile menu */
 .mobile-menu.active {
   display: flex;
-  animation: slideDown 0.3s ease forwards;
 }
 
-/* Animation */
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* MOBILE ITEMS */
+.mobile-menu li {
+  padding: 14px 20px;
 }
 
-/* ================= RESPONSIVE ================= */
+/* CUSTOMER HIGHLIGHT */
+.mobile-highlight {
+  background: #1abc9c;
+  color: #fff;
+}
+
+/* STAFF TITLE */
+.mobile-staff-title {
+  padding: 14px 20px;
+  font-weight: bold;
+  color: #1abc9c;
+  cursor: pointer;
+}
+
+/* 🔥 MOBILE SUBMENU */
+.mobile-submenu {
+  background: #f9f9f9;
+}
+
+.mobile-submenu li {
+  padding: 12px 35px;
+  font-size: 14px;
+}
+
+.mobile-submenu li:hover {
+  background: #eee;
+  color: #1abc9c;
+}
+
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .navbar-container {
     padding: 15px 20px;
@@ -163,3 +171,4 @@ ul {
     display: flex;
   }
 }
+

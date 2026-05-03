@@ -7,10 +7,7 @@ const Sidebar = ({ onSelect }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Clear login data (adjust based on your auth system)
     localStorage.removeItem("adminToken");
-
-    // Redirect to home page
     navigate("/");
   };
 
@@ -24,16 +21,36 @@ const Sidebar = ({ onSelect }) => {
         <>
           <ul>
             <li onClick={() => onSelect("dashboard")}>Dashboard</li>
-            <li onClick={() => onSelect("serviceRequests")}>Service Requests</li>
+
+            <li onClick={() => onSelect("serviceRequests")}>
+              Service Requests
+            </li>
+
             <li onClick={() => onSelect("workers")}>Workers</li>
-            <li onClick={() => onSelect("assignedRequests")}>Assigned Requests</li>
-            <li onClick={() => onSelect("completedRequests")}>Completed Requests</li>
+
+            <li onClick={() => onSelect("assignedRequests")}>
+              Assigned Requests
+            </li>
+
+            <li onClick={() => onSelect("completedRequests")}>
+              Completed Requests
+            </li>
+
             <li onClick={() => onSelect("borewellAssignment")}>
-  Borewell Assignment
+              Borewell Assignment
+            </li>
+
+            {/* 🔥 NEW ITEM ADDED */}
+            <li
+  onClick={() =>
+    window.open("https://borewell-lens-notes.lovable.app/", "_blank")
+  }
+>
+  Bore Inception
 </li>
           </ul>
 
-          {/* Logout at bottom */}
+          {/* Logout */}
           <div className="logout-section">
             <button className="logout-btn" onClick={handleLogout}>
               🚪 Logout

@@ -49,21 +49,42 @@ const token = tokens.admin || localStorage.getItem("adminToken");
     return;
   }
 
+  const cleanNumber = (val) =>
+    val === "" ? null : Number(val);
+
   try {
     const formattedData = {
-      ...formData,
-      borewell_depth: Number(formData.borewell_depth),
-      casing_depth: Number(formData.casing_depth),
-      water_level: Number(formData.water_level),
-      tds: Number(formData.tds),
-      ph: Number(formData.ph),
-      hardness: Number(formData.hardness),
-      iron: Number(formData.iron),
-      chlorine: Number(formData.chlorine),
-      nitrate: Number(formData.nitrate),
+      borewell_depth: cleanNumber(formData.borewell_depth),
+      casing_depth: cleanNumber(formData.casing_depth),
+      water_level: cleanNumber(formData.water_level),
+
+      pipe_size: formData.pipe_size || null,
+      pipe_joint: formData.pipe_joint || null,
+      water_gaps: formData.water_gaps || null,
+
+      casing_Condition: formData.casing_Condition || null,
+      pipe_Condition: formData.pipe_Condition || null,
+
+      Water_Quality: formData.Water_Quality || null,
+
+      tds: cleanNumber(formData.tds),
+      ph: cleanNumber(formData.ph),
+      hardness: cleanNumber(formData.hardness),
+      iron: cleanNumber(formData.iron),
+      chlorine: cleanNumber(formData.chlorine),
+      nitrate: cleanNumber(formData.nitrate),
+
+      water_color: formData.water_color || null,
+      water_smell: formData.water_smell || null,
+      water_quality_status: formData.water_quality_status || null,
     };
 
-    console.log("Submitting:", formattedData);
+    // remove null fields completely (VERY IMPORTANT)
+    Object.keys(formattedData).forEach((key) => {
+      if (formattedData[key] === null || formattedData[key] === "") {
+        delete formattedData[key];
+      }
+    });
 
     const res = await axios.post(
       `https://borewell-service-production.up.railway.app/admin/borewell-info/${customerNum}`,
@@ -79,7 +100,7 @@ const token = tokens.admin || localStorage.getItem("adminToken");
     alert("Borewell info submitted successfully ✅");
     console.log(res.data);
   } catch (err) {
-    console.error(err);
+    console.error(err.response?.data || err);
     alert(err.response?.data?.detail || "Error submitting data ❌");
   }
 };
