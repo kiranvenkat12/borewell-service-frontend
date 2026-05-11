@@ -49,7 +49,7 @@ const BorewellTool = () => {
 
     try {
       const res = await fetch(
-        "https://borewell-service-production.up.railway.app/service-requests/borewell",
+        "https://borewell-backend.onrender.com/service-requests/borewell",
         {
           method: "POST",
           headers: {
