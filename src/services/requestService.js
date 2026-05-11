@@ -1,4 +1,4 @@
-const BASE_URL = "https://borewell-service-production.up.railway.app";
+const BASE_URL = "https://borewell-backend.onrender.com";
 export const createRequest = async (formData) => {
   const res = await fetch(`${BASE_URL}/service-requests/`, {
     method: "POST",
