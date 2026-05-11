@@ -25,7 +25,7 @@ const CustomerDashboard = () => {
     setLoading(true);
     try {
       const res = await axios.get(
-        `https://borewell-service-production.up.railway.app/admin/borewell-info/${phoneNumber}`,
+         `https://borewell-service-production.onrender.com/admin/borewell-info/${phoneNumber}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

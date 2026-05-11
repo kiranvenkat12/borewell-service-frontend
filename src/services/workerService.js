@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "https://borewell-service-production.up.railway.app/worker-registers";
+const API = "https://borewell-service-production.onrender.com/worker-registers";
 
 // 🔥 Register Worker
 export const registerWorker = async (data) => {
@@ -12,7 +12,7 @@ export const registerWorker = async (data) => {
   }
 };
 
-// 🔥 Login Worker
+
 export const loginWorker = async (payload) => {
   try {
     const res = await axios.post(`${API}/login`, payload); // note: /login

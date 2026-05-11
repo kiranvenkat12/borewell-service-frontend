@@ -87,7 +87,7 @@ const token = tokens.admin || localStorage.getItem("adminToken");
     });
 
     const res = await axios.post(
-      `https://borewell-service-production.up.railway.app/admin/borewell-info/${customerNum}`,
+      `https://borewell-service-production.onrender.com/admin/borewell-info/${customerNum}`,
       formattedData,
       {
         headers: {

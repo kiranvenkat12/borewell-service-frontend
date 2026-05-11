@@ -73,7 +73,7 @@ const CustomerLogin = () => {
       setLoading(true);
 
       const response = await axios.post(
-        "https://borewell-service-production.up.railway.app/customer-registrations/login",
+        "https://borewell-service-production.onrender.com/customer-registrations/login",
         {
           phoneNumber: formData.phone.trim(),
           password: formData.password,

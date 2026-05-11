@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://borewell-service-production.up.railway.app/service-requests";
+const API_URL = "https://borewell-service-production.onrender.com/service-requests";
 
 // ✅ Get assigned tasks for logged-in worker
 export const getAssignedRequests = async () => {
